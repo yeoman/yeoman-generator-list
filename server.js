@@ -1,5 +1,5 @@
 const UPDATE_INTERVAL_IN_SECONDS = 60;
-const HTTP_PORT = 8000;
+const HTTP_PORT = process.env.PORT || 8000;
 
 var http = require('http');
 var Q = require('q');
@@ -24,17 +24,12 @@ function getPluginListEntity() {
 		});
 	return deferred.promise;
 }
-
+// Allow Cross-origin resource sharing
 
 var server = http.createServer(function(request, response) {
-	// Allow Cross-origin resource sharing
-	request.setHeader('Access-Control-Allow-Origin', '*');
-
 	// get the plugin list
 	pluginListEntity.then(function(entity) {
-		// Allow Cross-origin resource sharing
-		request.setHeader('Access-Control-Allow-Origin: *');
-
+		response.setHeader('Access-Control-Allow-Origin', '*');
 		if(request.headers['if-none-match'] === entity.etag) {
 			response.writeHead(304, {"Content-Type": "application/json"});
 			response.end();
@@ -45,6 +40,7 @@ var server = http.createServer(function(request, response) {
 		response.end(entity.json);
 	}).fail(function(e) {
 			// something went wrong
+			response.setHeader('Access-Control-Allow-Origin', '*');
 			response.writeHead(500);
 			response.end("Internal server error " + e);
 
