@@ -5,6 +5,7 @@ var http = require('http');
 var Q = require('q');
 var gruntPlugins = require('./grunt-plugins');
 var crypto = require('crypto');
+var connect = require('connect');
 
 
 // pluginListEntity - promise {etag: '', json: ''}
@@ -29,36 +30,36 @@ function getPluginListEntity() {
 		});
 	return deferred.promise;
 }
-// Allow Cross-origin resource sharing
-
-var server = http.createServer(function(request, response) {
-	// get the plugin list
-	pluginListEntity.then(function(entity) {
-		response.setHeader('Access-Control-Allow-Origin', '*');
-		if(request.headers['if-none-match'] === entity.etag) {
-			response.writeHead(304, {"Content-Type": "application/json"});
-			response.end();
-			return;
-		}
-		response.setHeader('ETag', entity.etag);
-		response.writeHead(200, {"Content-Type": "application/json"});
-		response.end(entity.json);
-	}).fail(function(e) {
-			// something went wrong
-			response.setHeader('Access-Control-Allow-Origin', '*');
-			response.writeHead(500);
-			response.end("Internal server error " + e);
-
-		});
-});
-
-
 // Update function
 setInterval(function() {
 	getPluginListEntity();
 }, UPDATE_INTERVAL_IN_SECONDS * 1000);
 
-server.listen(HTTP_PORT);
+var app = connect()
+	.use(connect.logger('dev'))
+	.use(connect.errorHandler())
+	.use(connect.timeout(10000))
+	.use(connect.compress())
+	.use(function(request, response, next) {
+		// get the plugin list
+		pluginListEntity.then(function(entity) {
+			// Allow Cross-origin resource sharing
+			response.setHeader('Access-Control-Allow-Origin', '*');
+			response.setHeader("Content-Type", "application/json");
+			response.setHeader('ETag', entity.etag);
+			if(request.headers['if-none-match'] === entity.etag) {
+				response.statusCode = 304;
+				response.end();
+				return;
+			}
+			response.statusCode = 200;
+			response.end(new Buffer(entity.json));
+		}).fail(function(e) {
+				// something went wrong
+				next(e);
+			})
+	})
+	.listen(HTTP_PORT);
 
 
 console.log('Server running on port ' + HTTP_PORT);
