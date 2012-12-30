@@ -2,7 +2,7 @@
   "name": "grunt-plugin-list",
   "version": "0.0.0",
   "description": "List of all grunt plugins",
-  "main": "index.js",
+  "main": "grunt-plugins.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
