@@ -1,9 +1,11 @@
 const UPDATE_INTERVAL_IN_SECONDS = 60;
-const HTTP_PORT = process.env.PORT || 8000;
+const HTTP_PORT = process.env.PORT || 8001;
 
 var http = require('http');
 var Q = require('q');
 var gruntPlugins = require('./grunt-plugins');
+var crypto = require('crypto');
+
 
 // pluginListEntity - promise {etag: '', json: ''}
 // using a promise so that clients can connect and wait for the initial entity
@@ -13,10 +15,13 @@ function getPluginListEntity() {
 	var deferred = Q.defer();
 	gruntPlugins.fetchPluginList().then(
 		function(pluginList) {
-			deferred.resolve({
-				etag: JSON.stringify(new Date()),
+			var entity = {
 				json: JSON.stringify(pluginList)
-			});
+			};
+			var shasum = crypto.createHash('sha1');
+			shasum.update(entity.json);
+			entity.etag = shasum.digest('hex');
+			deferred.resolve(entity);
 			// update the entity
 			pluginListEntity = deferred.promise;
 		}).fail(function(e) {
