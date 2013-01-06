@@ -30,10 +30,8 @@ function fetchPluginList() {
 		});
 		return deferred.promise;
 	}).then(function getPlugin(list) {
-			var results = [];
-			_.each(list, function(item) {
+			var results = _.map(list, function(item) {
 				var deferred = Q.defer();
-				results.push(deferred.promise);
 				var name = item.key[1];
 				var url = 'http://isaacs.iriscouch.com/registry/' + name;
 				request({url: url, json: true}, function handlePlugin(error, response, body) {
@@ -43,6 +41,7 @@ function fetchPluginList() {
 						deferred.reject(new Error(error));
 					}
 				});
+				return deferred.promise;
 			});
 			return Q.all(results);
 		});
