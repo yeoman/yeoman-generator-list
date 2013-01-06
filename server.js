@@ -39,7 +39,6 @@ var app = connect()
 	.use(connect.logger('dev'))
 	.use(connect.errorHandler())
 	.use(connect.timeout(10000))
-	.use(connect.compress())
 	.use(function(request, response, next) {
 		// get the plugin list
 		pluginListEntity.then(function(entity) {
