@@ -14,9 +14,9 @@
 	"license": "BSD",
 	"dependencies": {
 		"request": "~2.12.0",
-		"underscore": "~1.4.3",
 		"q": "~0.8.12",
-		"connect": "~2.7.1"
+		"connect": "~2.7.1",
+		"lodash": "~1.0.0-rc.3"
 	},
 	"engines": {
 		"node": "0.8.x",
