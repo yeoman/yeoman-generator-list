@@ -4,14 +4,15 @@ var Q = require('q');
 
 
 function condensePlugin(plugin) {
-	plugin.keywords = keywords = _.last(_.values(plugin.versions)).keywords;
-	delete plugin.versions;
-	delete plugin._attachments;
-	delete plugin.readme;
-	var time = plugin.time;
-	delete plugin.time;
-	plugin.time = {modified: time.modified, created: time.created};
-	return plugin;
+	var keywords = keywords = _.last(_.values(plugin.versions)).keywords;
+	return {
+		name: plugin.name,
+		description: plugin.description,
+		author: plugin.author,
+		keywords: keywords,
+		// only get created and modified date, leave out all of the version timestamps
+		time: {modified: plugin.time.modified, created: plugin.time.created}
+	};
 }
 
 function fetchPluginList() {
