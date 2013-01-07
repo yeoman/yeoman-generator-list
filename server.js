@@ -1,4 +1,5 @@
-const UPDATE_INTERVAL_IN_SECONDS = 60;
+// Update once every hour
+const UPDATE_INTERVAL_IN_SECONDS = 60*60;
 const HTTP_PORT = process.env.PORT || 8001;
 
 var http = require('http');
