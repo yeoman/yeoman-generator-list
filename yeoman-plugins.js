@@ -19,7 +19,7 @@ function condensePlugin(plugin) {
 function fetchPluginList() {
 	return Q.fcall(function fetchPluginList() {
 		var deferred = Q.defer();
-		var keyword = 'gruntplugin';
+		var keyword = 'yeoman';
 		var url = 'http://isaacs.iriscouch.com/registry/_design/app/_view/byKeyword?startkey=[%22' +
 			keyword + '%22]&endkey=[%22' + keyword + '%22,{}]&group_level=3';
 		request({url: url, json: true}, function handlePluginList(error, response, body) {
