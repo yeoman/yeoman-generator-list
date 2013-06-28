@@ -17,16 +17,9 @@ function createComponentData(name, data) {
 }
 
 function condensePlugin(plugin) {
-	var keywords = keywords = _.last(_.values(plugin.versions)).keywords;
 	return {
 		name: plugin.name,
-		description: plugin.description,
-		author: plugin.author,
-		url: plugin.url,
-		keywords: keywords,
     gitURL: (plugin.repository) ? plugin.repository.url : '',
-		// only get created and modified date, leave out all of the version timestamps
-		time: {modified: plugin.time.modified, created: plugin.time.created}
 	};
 }
 
@@ -98,8 +91,6 @@ function fetchPluginList() {
             deferred.resolve();
           } else {
             deferred.reject(new Error('GitHub fetch failed\n' + err + '\n' + body));
-            console.log(err);
-            console.log(body);
           }
         }
         return deferred.promise;
