@@ -1,7 +1,7 @@
 {
 	"name": "yeoman-plugin-list",
 	"version": "0.0.0",
-	"description": "List of all yeoman plugins",
+	"description": "List of all yeoman generators",
 	"main": "yeoman-plugins.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
 	"keywords": [
 		"yeoman"
 	],
-	"author": "Manuel Woelker",
+	"author": "Eric J. Duran",
 	"license": "BSD",
 	"dependencies": {
 		"request": "~2.12.0",
