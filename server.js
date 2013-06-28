@@ -4,7 +4,7 @@ const HTTP_PORT = process.env.PORT || 8001;
 
 var http = require('http');
 var Q = require('q');
-var gruntPlugins = require('./yeoman-plugins');
+var yeomanPlugins = require('./yeoman-plugins');
 var crypto = require('crypto');
 var connect = require('connect');
 
@@ -15,7 +15,7 @@ var pluginListEntity = getPluginListEntity();
 
 function getPluginListEntity() {
 	var deferred = Q.defer();
-	gruntPlugins.fetchPluginList().then(
+	yeomanPlugins.fetchPluginList().then(
 		function(pluginList) {
 			var entity = {
 				json: JSON.stringify(pluginList)
