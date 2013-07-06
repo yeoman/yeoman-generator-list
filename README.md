@@ -1,9 +1,10 @@
-# yeoman plugin list
+# Yeoman Generator list
 
-Generates a list of all yeoman plugins as json and serves it via http.
+Generates a list of all Yeoman Generators as JSON and serves it via HTTP.
 
 
 ## Usage
 
 node install
+
 node server.js
