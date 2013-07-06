@@ -1,8 +1,8 @@
 {
-	"name": "yeoman-plugin-list",
+	"name": "yeoman-generator-list",
 	"version": "0.0.0",
 	"description": "List of all yeoman generators",
-	"main": "yeoman-plugins.js",
+	"main": "yeoman-generators.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

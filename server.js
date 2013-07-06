@@ -4,7 +4,7 @@ const HTTP_PORT = process.env.PORT || 8001;
 
 var http = require('http');
 var Q = require('q');
-var yeomanPlugins = require('./yeoman-plugins');
+var yeomanPlugins = require('./yeoman-generators');
 var crypto = require('crypto');
 var connect = require('connect');
 
