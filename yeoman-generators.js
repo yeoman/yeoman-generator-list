@@ -17,42 +17,42 @@ function createComponentData(name, data) {
 }
 
 function condensePlugin(plugin) {
-	return {
-		name: plugin.name,
+  return {
+    name: plugin.name,
     gitURL: (plugin.repository) ? plugin.repository.url : '',
-	};
+  };
 }
 
 function fetchPluginList() {
-	return Q.fcall(function fetchPluginList() {
-		var deferred = Q.defer();
-		var keyword = 'yeoman-generator';
-		var url = 'http://isaacs.iriscouch.com/registry/_design/app/_view/byKeyword?startkey=[%22' +
-			keyword + '%22]&endkey=[%22' + keyword + '%22,{}]&group_level=3';
-		request({url: url, json: true}, function handlePluginList(error, response, body) {
-			if(!error && response.statusCode == 200) {
-				deferred.resolve(body.rows);
-			} else {
-				deferred.reject(new Error(error));
-			}
-		});
-		return deferred.promise;
-	}).then(function getPlugin(list) {
-			var results = _.map(list, function(item) {
-				var deferred = Q.defer();
-				var name = item.key[1];
-				var url = 'http://isaacs.iriscouch.com/registry/' + name;
-				request({url: url, json: true}, function handlePlugin(error, response, body) {
-					if(!error && response.statusCode == 200) {
-						deferred.resolve(condensePlugin(body));
-					} else {
-						deferred.reject(new Error(error));
-					}
-				});
-				return deferred.promise;
-			});
-			return Q.all(results);
-	}).then(function getGithubStats(list) {
+  return Q.fcall(function fetchPluginList() {
+    var deferred = Q.defer();
+    var keyword = 'yeoman-generator';
+    var url = 'http://isaacs.iriscouch.com/registry/_design/app/_view/byKeyword?startkey=[%22' +
+      keyword + '%22]&endkey=[%22' + keyword + '%22,{}]&group_level=3';
+    request({url: url, json: true}, function handlePluginList(error, response, body) {
+      if(!error && response.statusCode == 200) {
+        deferred.resolve(body.rows);
+      } else {
+        deferred.reject(new Error(error));
+      }
+    });
+    return deferred.promise;
+  }).then(function getPlugin(list) {
+      var results = _.map(list, function(item) {
+        var deferred = Q.defer();
+        var name = item.key[1];
+        var url = 'http://isaacs.iriscouch.com/registry/' + name;
+        request({url: url, json: true}, function handlePlugin(error, response, body) {
+          if(!error && response.statusCode == 200) {
+            deferred.resolve(condensePlugin(body));
+          } else {
+            deferred.reject(new Error(error));
+          }
+        });
+        return deferred.promise;
+      });
+      return Q.all(results);
+  }).then(function getGithubStats(list) {
     var results = _.map(list, function(item) {
       var deferred = Q.defer();
       console.log(item);
