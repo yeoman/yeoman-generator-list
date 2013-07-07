@@ -3,11 +3,12 @@ var _ = require('lodash');
 var Q = require('q');
 
 
-function createComponentData(name, data) {
+function createComponentData(name, author, data) {
   return {
     name: name,
     description: data.description,
-    owner: data.owner.login,
+    owner: author && author.name || data.owner.login,
+    ownerWebsite: author.url || data.owner.html_url,
     website: data.html_url,
     forks: data.forks,
     stars: data.watchers,
@@ -19,6 +20,7 @@ function createComponentData(name, data) {
 function condensePlugin(plugin) {
   return {
     name: plugin.name,
+    author: plugin.author ? plugin.author : '',
     gitURL: plugin.repository ? plugin.repository.url : '',
   };
 }
@@ -78,7 +80,7 @@ function fetchPluginList() {
         }
       }, function (err, response, body) {
         if (!err && response.statusCode === 200) {
-          deferred.resolve(createComponentData(item.name, body));
+          deferred.resolve(createComponentData(item.name, item.author, body));
         } else {
           if (response.statusCode === 404) {
             // don't fail just because the repo doesnt exist
