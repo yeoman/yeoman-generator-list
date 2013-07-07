@@ -3,12 +3,10 @@
 	"version": "0.0.0",
 	"description": "List of all yeoman generators",
 	"main": "yeoman-generators.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": "",
+	"repository": "https://github.com/yeoman/yeoman-generator-list",
 	"keywords": [
-		"yeoman"
+		"yeoman",
+		"generator"
 	],
 	"author": "Eric J. Duran",
 	"license": "BSD",
@@ -19,7 +17,6 @@
 		"lodash": "~1.0.0-rc.3"
 	},
 	"engines": {
-		"node": "0.8.x",
-		"npm": "1.1.x"
+		"node": ">=0.8.0"
 	}
 }
