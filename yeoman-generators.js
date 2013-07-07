@@ -19,7 +19,7 @@ function createComponentData(name, data) {
 function condensePlugin(plugin) {
   return {
     name: plugin.name,
-    gitURL: (plugin.repository) ? plugin.repository.url : '',
+    gitURL: plugin.repository ? plugin.repository.url : '',
   };
 }
 
@@ -38,12 +38,12 @@ function fetchPluginList() {
     });
     return deferred.promise;
   }).then(function getPlugin(list) {
-      var results = _.map(list, function(item) {
+      var results = _.map(list, function (item) {
         var deferred = Q.defer();
         var name = item.key[1];
         var url = 'http://isaacs.iriscouch.com/registry/' + name;
         request({url: url, json: true}, function handlePlugin(error, response, body) {
-          if(!error && response.statusCode == 200) {
+          if (!error && response.statusCode == 200) {
             deferred.resolve(condensePlugin(body));
           } else {
             deferred.reject(new Error(error));
@@ -53,9 +53,8 @@ function fetchPluginList() {
       });
       return Q.all(results);
   }).then(function getGithubStats(list) {
-    var results = _.map(list, function(item) {
+    var results = _.map(list, function (item) {
       var deferred = Q.defer();
-      console.log(item);
       var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
       var parsedUrl = re.exec(item.gitURL.replace(/\.git$/, ''));
       // only return components from github
@@ -82,10 +81,6 @@ function fetchPluginList() {
           deferred.resolve(createComponentData(item.name, body));
         } else {
           if (response.statusCode === 404) {
-            // uncomment to get a list of registry items pointing
-            // to non-existing repos
-            //console.log(el.name + '\n' + el.url + '\n');
-
             // don't fail just because the repo doesnt exist
             // instead just return `undefined` and filter it out later
             deferred.resolve();
