@@ -55,7 +55,9 @@ function fetchPluginList() {
       });
       return Q.all(results);
   }).then(function getGithubStats(list) {
-    var results = _.map(list, function (item) {
+    // Make sure we have a gitURL.
+    var results = _.reject(list, { 'gitURL': '' });
+    results = _.map(results, function (item) {
       var deferred = Q.defer();
       var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
       var parsedUrl = re.exec(item.gitURL.replace(/\.git$/, ''));
