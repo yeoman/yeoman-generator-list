@@ -56,8 +56,7 @@ function fetchPluginList() {
       return Q.all(results);
   }).then(function getGithubStats(list) {
     // Make sure we have a gitURL.
-    var results = _.reject(list, { 'gitURL': '' });
-    results = _.map(results, function (item) {
+    var results = _.map(list, function (item) {
       var deferred = Q.defer();
       var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
       var parsedUrl = re.exec(item.gitURL.replace(/\.git$/, ''));
@@ -96,6 +95,13 @@ function fetchPluginList() {
       });
       return deferred.promise;
     });
+    return Q.all(results);
+  }).then(function filterInvalidValues(generators) {
+    // Filter our all null values.
+    var results = _.reject(generators, function(val) {
+      return val == null;
+    });
+
     return Q.all(results);
   });
 }
