@@ -15,6 +15,7 @@ var pluginListEntity = getPluginListEntity();
 
 function getPluginListEntity() {
   var deferred = Q.defer();
+
   yeomanPlugins.fetchPluginList().then(
     function(pluginList) {
       var entity = {
@@ -29,6 +30,7 @@ function getPluginListEntity() {
     }).fail(function(e) {
       deferred.reject(e);
     });
+
   return deferred.promise;
 }
 // Update function
@@ -39,7 +41,7 @@ setInterval(function() {
 var app = connect()
   .use(connect.logger('dev'))
   .use(connect.errorHandler())
-  .use(connect.timeout(10000))
+  .use(connect.timeout(30000))
   .use(function(request, response, next) {
     // get the plugin list
     pluginListEntity.then(function(entity) {
