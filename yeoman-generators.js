@@ -59,7 +59,7 @@ function fetchPluginList() {
     var results = _.map(list, function (item) {
       var deferred = Q.defer();
       var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
-      var parsedUrl = re.exec(item.gitURL.replace(/\.git$/, ''));
+      var parsedUrl = re.exec(item.gitURL && item.gitURL.replace(/\.git$/, ''));
       // only return components from github
       if (!parsedUrl) {
         deferred.resolve();
