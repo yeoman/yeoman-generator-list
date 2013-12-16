@@ -14,3 +14,9 @@ Generates a list of all Yeoman Generators as JSON and serves it via HTTP.
 - Run `node server.js && open http://localhost:8001`
 
 You can change the port by setting the `PORT` environment variable.
+
+
+## License
+
+[BSD license](http://opensource.org/licenses/bsd-license.php)
+Copyright (c) Google
