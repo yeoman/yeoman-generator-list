@@ -20,13 +20,9 @@ You can change the port by setting the `PORT` environment variable.
 
 You can run this project as a Docker container by first building the image.
 
-- Run the the following command in this directory:
+- Run the the following command in this directory: `docker build -t <repo>[:<tag>] .`
 
-```docker build -t <repo>[:<tag>] .``
-
-- Run the container:
-
-```docker run -d -P -e GITHUB_CLIENT_ID=<my-client-id> -e GITHUB_CLIENT_SECRET=<my-client-secret> -e NODE_ENV=production <repo>[:<tag>]```
+- Run the container: `docker run -d -P -e GITHUB_CLIENT_ID=<my-client-id> -e GITHUB_CLIENT_SECRET=<my-client-secret> -e NODE_ENV=production <repo>[:<tag>]`
 
 ## License
 
