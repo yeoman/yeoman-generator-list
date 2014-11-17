@@ -16,6 +16,14 @@ Generates a list of all Yeoman Generators as JSON and serves it via HTTP.
 You can change the port by setting the `PORT` environment variable.
 
 
+## Using Docker
+
+You can run this project as a Docker container by first building the image.
+
+- Run the the following command in this directory: `docker build -t <repo>[:<tag>] .`
+
+- Run the container: `docker run -d -P -e GITHUB_CLIENT_ID=<my-client-id> -e GITHUB_CLIENT_SECRET=<my-client-secret> -e NODE_ENV=production <repo>[:<tag>]`
+
 ## License
 
 [BSD license](http://opensource.org/licenses/bsd-license.php)
