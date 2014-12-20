@@ -7,6 +7,9 @@ var Q = require('q');
 var yeomanPlugins = require('./yeoman-generators');
 var crypto = require('crypto');
 var connect = require('connect');
+var morgan = require('morgan');
+var errorhandler = require('errorhandler');
+var timeout = require('connect-timeout');
 
 
 // pluginListEntity - promise {etag: '', json: ''}
@@ -37,9 +40,9 @@ setInterval(function() {
 }, UPDATE_INTERVAL_IN_SECONDS * 1000);
 
 var app = connect()
-  .use(connect.logger('dev'))
-  .use(connect.errorHandler())
-  .use(connect.timeout(10000))
+  .use(morgan('dev'))
+  .use(errorhandler())
+  .use(timeout(10000))
   .use(function(request, response, next) {
     // get the plugin list
     pluginListEntity.then(function(entity) {
