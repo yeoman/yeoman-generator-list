@@ -2,7 +2,6 @@ var request = require('request');
 var _ = require('lodash');
 var Q = require('q');
 
-
 function createComponentData(name, author, data) {
   return {
     name: name,
@@ -31,19 +30,22 @@ function fetchPluginList() {
     var keyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
     var url = 'https://skimdb.npmjs.com/registry/_design/app/_view/byKeyword?startkey=[%22' +
       keyword + '%22]&endkey=[%22' + keyword + '%22,{}]&group_level=3';
+
     request({url: url, json: true}, function handlePluginList(error, response, body) {
-      if(!error && response.statusCode == 200) {
+      if (!error && response.statusCode === 200) {
         deferred.resolve(body.rows);
       } else {
         deferred.reject(new Error(error));
       }
     });
+
     return deferred.promise;
   }).then(function getPlugin(list) {
       var results = _.map(list, function (item) {
         var deferred = Q.defer();
         var name = item.key[1];
         var url = 'https://skimdb.npmjs.com/registry/' + name;
+
         request({url: url, json: true}, function handlePlugin(error, response, body) {
           if (!error && response.statusCode == 200) {
             deferred.resolve(condensePlugin(body));
@@ -51,8 +53,10 @@ function fetchPluginList() {
             deferred.reject(new Error(error));
           }
         });
+
         return deferred.promise;
       });
+
       return Q.all(results);
   }).then(function getGithubStats(list) {
     // Make sure we have a gitURL.

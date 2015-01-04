@@ -1,26 +1,26 @@
 {
   "name": "yeoman-generator-list",
-  "version": "0.0.0",
-  "description": "List of all yeoman generators",
+  "description": "List of all Yeoman generators",
   "main": "yeoman-generators.js",
-  "repository": "https://github.com/yeoman/yeoman-generator-list",
+  "repository": "yeoman/yeoman-generator-list",
   "keywords": [
     "yeoman",
     "generator"
   ],
-  "author": "Eric J. Duran",
+  "author": "Yeoman team",
   "license": "BSD",
   "dependencies": {
-    "connect": "~3.0.0",
+    "connect": "^3.3.3",
     "connect-timeout": "^1.4.0",
     "errorhandler": "^1.3.0",
-    "lodash": "~1.0.0",
+    "lodash": "^2.4.1",
     "morgan": "^1.5.0",
-    "q": "~0.8.12",
-    "request": "~2.12.0"
+    "q": "^1.1.2",
+    "request": "^2.51.0"
   },
   "engines": {
     "node": ">=0.10.0"
   },
-  "start": "npm server.js"
+  "start": "npm server.js",
+  "private": true
 }
