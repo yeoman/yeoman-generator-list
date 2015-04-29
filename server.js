@@ -35,6 +35,7 @@ connect()
   .use(morgan('dev'))
   .use(errorhandler())
   .use(timeout(10000))
+  .use(compression())
   .use(function (req, res, next) {
     // get the plugin list
     pluginListEntity.then(function (entity) {
@@ -51,7 +52,6 @@ connect()
       res.end(new Buffer(entity.json));
     }).fail(next);
   })
-  .use(compression())
   .listen(HTTP_PORT);
 
 console.log('Server running on port', HTTP_PORT);
