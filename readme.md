@@ -7,11 +7,11 @@ Generates a list of all Yeoman generators as JSON and serves it via HTTP.
 
 ## Getting Started
 
-- Install dependencies: `npm install`
+- Install dependencies: `$ npm install`
 
-- [Register a new OAuth app](https://github.com/settings/applications/new) on GitHub. This is needed since GitHub allows more API usage for registered apps.
+- Create a [Personal access token](https://github.com/settings/tokens/new) on GitHub. This is needed since GitHub allows more API usage for authorized access.
 
-- Set the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` from your newly created app. Remember set the `NODE_ENV` to `production` when you deploy.
+- Set the environment variable `GITHUB_TOKEN` to your newly created token. Remember to set the `NODE_ENV` to `production` when you deploy.
 
 - Run `node server.js && open http://localhost:8001`
 
