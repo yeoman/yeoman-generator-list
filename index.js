@@ -11,7 +11,6 @@ function createComponentData(npm, gh) {
     owner: npm.author && npm.author.name || gh.owner.login,
     ownerWebsite: npm.author && npm.author.url || gh.owner.html_url,
     website: gh.html_url,
-    forks: gh.forks,
     stars: gh.stargazers_count,
     created: gh.created_at,
     updated: gh.updated_at
