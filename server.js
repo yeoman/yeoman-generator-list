@@ -5,6 +5,7 @@ var connect = require('connect');
 var morgan = require('morgan');
 var errorhandler = require('errorhandler');
 var timeout = require('connect-timeout');
+var compression = require('compression');
 var fetchGeneratorList = require('./');
 
 // update once every hour
@@ -50,6 +51,7 @@ connect()
       res.end(new Buffer(entity.json));
     }).fail(next);
   })
+  .use(compression())
   .listen(HTTP_PORT);
 
 console.log('Server running on port', HTTP_PORT);
