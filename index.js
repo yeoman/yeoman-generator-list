@@ -79,7 +79,7 @@ function getGithubStats(list) {
     var user = parsedUrl[1];
     var repo = parsedUrl[2];
 
-    ghGot.get('repos/' + user + '/' + repo, {
+    ghGot('repos/' + user + '/' + repo, {
       headers: {
         'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
       }
