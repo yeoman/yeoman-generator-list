@@ -12,7 +12,7 @@ var fetchGeneratorList = require('./');
 var UPDATE_INTERVAL_IN_SECONDS = 60 * 60;
 var HTTP_PORT = process.env.PORT || 8001;
 
-function getPluginListEntity() {
+function fetchListEntity() {
   return fetchGeneratorList().then(function (pluginList) {
     var entity = {json: JSON.stringify(pluginList)};
     var shasum = crypto.createHash('sha1');
@@ -24,34 +24,39 @@ function getPluginListEntity() {
   });
 }
 
+function serveList(req, res, next) {
+  listEntity.then(function (entity) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('ETag', entity.etag);
+    if (req.headers['if-none-match'] === entity.etag) {
+      res.statusCode = 304;
+      res.end();
+      return;
+    }
+    res.statusCode = 200;
+    res.end(new Buffer(entity.json));
+  }).fail(next);
+}
+
 // pluginListEntity - promise {etag: '', json: ''}
 // using a promise so that clients can connect and wait for the initial entity
-var pluginListEntity = getPluginListEntity();
+var listEntity = fetchListEntity();
 
 // update function
-setInterval(getPluginListEntity, UPDATE_INTERVAL_IN_SECONDS * 1000);
+setInterval(fetchListEntity, UPDATE_INTERVAL_IN_SECONDS * 1000);
 
-connect()
-  .use(morgan('dev'))
-  .use(errorhandler())
+var app = connect();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(errorhandler())
+}
+
+app.use(morgan('dev'))
   .use(timeout(10000))
   .use(compression())
-  .use(function (req, res, next) {
-    // get the plugin list
-    pluginListEntity.then(function (entity) {
-      // Allow Cross-origin resource sharing
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('ETag', entity.etag);
-      if (req.headers['if-none-match'] === entity.etag) {
-        res.statusCode = 304;
-        res.end();
-        return;
-      }
-      res.statusCode = 200;
-      res.end(new Buffer(entity.json));
-    }).fail(next);
-  })
-  .listen(HTTP_PORT);
+  .use(serveList);
+
+app.listen(HTTP_PORT);
 
 console.log('Server running on port', HTTP_PORT);
