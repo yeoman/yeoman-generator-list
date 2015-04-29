@@ -1,6 +1,8 @@
-# Yeoman generator list
+# yeoman-generator-list
 
-Generates a list of all Yeoman Generators as JSON and serves it via HTTP.
+> List of all Yeoman generators with GitHub metadata
+
+Generates a list of all Yeoman generators as JSON and serves it via HTTP.
 
 
 ## Getting Started
@@ -23,6 +25,7 @@ You can run this project as a Docker container by first building the image.
 - Run the the following command in this directory: `docker build -t <repo>[:<tag>] .`
 
 - Run the container: `docker run -d -P -e GITHUB_CLIENT_ID=<my-client-id> -e GITHUB_CLIENT_SECRET=<my-client-secret> -e NODE_ENV=production <repo>[:<tag>]`
+
 
 ## License
 
