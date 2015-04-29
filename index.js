@@ -25,88 +25,99 @@ function condenseMeta(pkg) {
   };
 }
 
-module.exports = function () {
-  return Q.fcall(function getNpmPackageList() {
-    // TODO: there has to be a better way to combine cb interface with promises than this mess
-    var d = Q.defer();
-    var keyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
+function getNpmPackageList() {
+  // TODO: there has to be a better way to combine cb interface with promises than this mess
+  var d = Q.defer();
+  var keyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
 
-    npmKeyword(keyword, function (err, packages) {
+  npmKeyword(keyword, function (err, packages) {
+    if (err) {
+      d.reject(err);
+      return;
+    }
+
+    d.resolve(packages);
+  });
+
+  return d.promise;
+}
+
+function getNpmPackages(list) {
+  return Q.all(list.map(function (el) {
+    var d = Q.defer();
+
+    packageJson(el.name, function (err, pkg) {
       if (err) {
         d.reject(err);
         return;
       }
 
-      d.resolve(packages);
+      d.resolve(condenseMeta(pkg));
     });
 
     return d.promise;
-  }).then(function getNpmPackages(list) {
-      return Q.all(list.slice(0,10).map(function (el) {
-        var d = Q.defer();
+  }));
+}
 
-        packageJson(el.name, function (err, pkg) {
-          if (err) {
-            d.reject(err);
-            return;
-          }
+function getGithubStats(list) {
+  // make sure we have a git URL
+  return Q.all(list.map(function (el) {
+    var d = Q.defer();
+    var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
 
-          d.resolve(condenseMeta(pkg));
-        });
+    if (!el.gitURL) {
+      console.log('getGithubStats:', 'No gitURL', el);
+    }
 
-        return d.promise;
-      }));
-  }).then(function getGithubStats(list) {
-    // make sure we have a git URL
-    return Q.all(list.map(function (el) {
-      var d = Q.defer();
-      var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
+    var parsedUrl = re.exec(el.gitURL && el.gitURL.replace(/\.git$/, ''));
+    // only return components from github
+    if (!parsedUrl) {
+      d.resolve();
+      return d.promise;
+    }
 
-      if (!el.gitURL) {
-        console.log('getGithubStats:', 'No gitURL', el);
+    var user = parsedUrl[1];
+    var repo = parsedUrl[2];
+
+    ghGot.get('repos/' + user + '/' + repo, {
+      qs: {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET
+      },
+      headers: {
+        'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
       }
-
-      var parsedUrl = re.exec(el.gitURL && el.gitURL.replace(/\.git$/, ''));
-      // only return components from github
-      if (!parsedUrl) {
-        d.resolve();
-        return d.promise;
-      }
-
-      var user = parsedUrl[1];
-      var repo = parsedUrl[2];
-
-      ghGot.get('repos/' + user + '/' + repo, {
-        qs: {
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET
-        },
-        headers: {
-          'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
-        }
-      }, function (err, data, res) {
-        if (err) {
-          if (res.statusCode === 404) {
-            // don't fail just because the repo doesnt exist
-            // instead just return `undefined` and filter it out later
-            d.resolve();
-          } else {
-            d.reject(new Error('GitHub fetch failed\n' + err + '\n' + data));
-          }
+    }, function (err, data, res) {
+      if (err) {
+        if (err.code === 404) {
+          // don't fail just because the repo doesnt exist
+          // instead just return `undefined` and filter it out later
+          d.resolve();
         } else {
-          d.resolve(createComponentData(el, data));
+          d.reject(new Error('GitHub fetch failed\n' + err + '\n' + data));
         }
-
-        return d.promise;
-      });
+      } else {
+        d.resolve(createComponentData(el, data));
+      }
 
       return d.promise;
-    }));
-  }).then(function filterInvalidValues(list) {
-    // TODO: this is pretty ugly. find a better way.
-    // filter out null values introduced in previous steps
-    return Q.all(_.reject(list, function (val) {
-      return val == null;
-    }));
-  });
+    });
+
+    return d.promise;
+  }));
+}
+
+function filterInvalidValues(list) {
+  // TODO: this is pretty ugly. find a better way.
+  // filter out null values introduced in previous steps
+  return Q.all(_.reject(list, function (val) {
+    return val == null;
+  }));
+}
+
+module.exports = function () {
+  return Q.fcall(getNpmPackageList)
+    .then(getNpmPackages)
+    .then(getGithubStats)
+    .then(filterInvalidValues);
 }
