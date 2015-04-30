@@ -81,7 +81,8 @@ function getGithubStats(list) {
 
     ghGot('repos/' + user + '/' + repo, {
       headers: {
-        'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
+        'user-agent': 'https://github.com/yeoman/yeoman-generator-list',
+        'authorization': 'token ' + process.env.GITHUB_TOKEN
       }
     }, function (err, data, res) {
       if (err) {

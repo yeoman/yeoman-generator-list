@@ -13,7 +13,7 @@ Generates a list of all Yeoman generators as JSON and serves it via HTTP.
 
 - Set the environment variable `GITHUB_TOKEN` to your newly created token. Remember to set the `NODE_ENV` to `production` when you deploy.
 
-- Run `node server.js && open http://localhost:8001`
+- Run `npm start && open http://localhost:8001`
 
 You can change the port by setting the `PORT` environment variable.
 
