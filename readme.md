@@ -4,28 +4,39 @@
 
 Generates a list of all Yeoman generators as JSON and serves it via HTTP.
 
+## Setting your environment
 
-## Getting Started
-
-- Install dependencies: `$ npm install`
-
-- Create a [Personal access token](https://github.com/settings/tokens/new) on GitHub. This is needed since GitHub allows more API usage for authorized access.
-
-- Set the environment variable `GITHUB_TOKEN` to your newly created token. Remember to set the `NODE_ENV` to `production` when you deploy.
-
-- Run `npm start && open http://localhost:8001`
+1. Create a [Personal access token](https://github.com/settings/tokens/new) on GitHub. This is needed since GitHub allows more API usage for authorized access. Set the environment variable `GITHUB_TOKEN` to your newly created token.
+2. Remember to set the `NODE_ENV` to `production` when you deploy.
 
 You can change the port by setting the `PORT` environment variable.
 
+## Running with Docker (using Heroku toolbelt)
 
-## Using Docker
+We'll assume you're using [boot2docker](http://boot2docker.io/) on OSx. Steps may vary on other platforms.
 
-You can run this project as a Docker container by first building the image.
+Read [Heroku documentation](https://blog.heroku.com/archives/2015/5/5/introducing_heroku_docker_release_build_deploy_heroku_apps_with_docker) for full details on running an app as a docker container.
 
-- Run the the following command in this directory: `docker build -t <repo>[:<tag>] .`
+To run the project locally:
 
-- Run the container: `docker run -d -P -e GITHUB_TOKEN=<my-token> -e NODE_ENV=production <repo>[:<tag>]`
+```bash
+# Start docker
+boot2docker up
 
+# Then start the app
+heroku docker:start
+```
+
+To deploy to Heroku:
+
+```bash
+heroku docker:release
+```
+
+## Running manually
+
+- Install dependencies: `$ npm install`
+- Run `npm start && open http://localhost:8001`
 
 ## License
 
