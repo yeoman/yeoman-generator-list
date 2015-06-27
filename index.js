@@ -80,7 +80,7 @@ function getGithubStats(list) {
     var repo = parsedUrl[2];
 
     ghGot('repos/' + user + '/' + repo, {
-      qs: {
+      query: {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET
       },
