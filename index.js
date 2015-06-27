@@ -80,9 +80,12 @@ function getGithubStats(list) {
     var repo = parsedUrl[2];
 
     ghGot('repos/' + user + '/' + repo, {
+      qs: {
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET
+      },
       headers: {
-        'user-agent': 'https://github.com/yeoman/yeoman-generator-list',
-        'authorization': 'token ' + process.env.GITHUB_TOKEN
+        'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
       }
     }, function (err, data, res) {
       if (err) {
