@@ -6,14 +6,12 @@ var morgan = require('morgan');
 var errorhandler = require('errorhandler');
 var timeout = require('connect-timeout');
 var compression = require('compression');
-var fetchGeneratorList = require('./');
+var pluginCache = require('./');
 
-// update once every hour
-var UPDATE_INTERVAL_IN_SECONDS = 60 * 60;
 var HTTP_PORT = process.env.PORT || 8001;
 
-function fetchListEntity() {
-  return fetchGeneratorList().then(function (pluginList) {
+function prepareEntityResponse() {
+  return pluginCache.get().then(function (pluginList) {
     var entity = {json: JSON.stringify(pluginList)};
     var shasum = crypto.createHash('sha1');
 
@@ -25,7 +23,7 @@ function fetchListEntity() {
 }
 
 function serveList(req, res, next) {
-  listEntity.then(function (entity) {
+  prepareEntityResponse().then(function (entity) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('ETag', entity.etag);
@@ -39,13 +37,7 @@ function serveList(req, res, next) {
   }).fail(next);
 }
 
-// pluginListEntity - promise {etag: '', json: ''}
-// using a promise so that clients can connect and wait for the initial entity
-var listEntity = fetchListEntity();
-
-// update function
-setInterval(fetchListEntity, UPDATE_INTERVAL_IN_SECONDS * 1000);
-
+pluginCache.start();
 var app = connect();
 
 if (process.env.NODE_ENV === 'development') {

@@ -3,6 +3,10 @@ var Q = require('q');
 var npmKeyword = require('npm-keyword');
 var packageJson = require('package-json');
 var ghGot = require('gh-got');
+var EventEmitter = require('events').EventEmitter;
+
+var UPDATE_INTERVAL_IN_SECONDS = 60 * 60;
+
 
 function createComponentData(npm, gh) {
   return {
@@ -115,9 +119,47 @@ function filterInvalidValues(list) {
   }));
 }
 
-module.exports = function () {
+function fetchPluginList() {
   return Q.fcall(getNpmPackageList)
     .then(getNpmPackages)
     .then(getGithubStats)
     .then(filterInvalidValues);
 }
+
+
+module.exports = {
+  pluginList: null,
+  hub: new EventEmitter(),
+
+  start: function () {
+    this.update();
+  },
+
+  update: function () {
+    console.log('Updating the plugin list');
+    fetchPluginList()
+      .then(function (pluginList) {
+        console.log('plugin list updated');
+        this.pluginList = pluginList;
+        this.hub.trigger('update', pluginList);
+        setTimeout(this.update.bind(this), UPDATE_INTERVAL_IN_SECONDS * 1000);
+      }.bind(this))
+      .catch(function (err) {
+        console.log('Error while fetching plugin list', err);
+      });
+  },
+
+  get: function (cb) {
+    var d = Q.defer();
+
+    if (this.pluginList) {
+      d.resolve(this.pluginList);
+    } else {
+      this.hub.on('update', function (pluginList) {
+        d.resolve(pluginList)
+      });
+    }
+
+    return d.promise
+  }
+};
