@@ -141,7 +141,7 @@ module.exports = {
       .then(function (pluginList) {
         console.log('plugin list updated');
         this.pluginList = pluginList;
-        this.hub.trigger('update', pluginList);
+        this.hub.emit('update', pluginList);
         setTimeout(this.update.bind(this), UPDATE_INTERVAL_IN_SECONDS * 1000);
       }.bind(this))
       .catch(function (err) {
