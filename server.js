@@ -10,30 +10,26 @@ var pluginCache = require('./');
 
 var HTTP_PORT = process.env.PORT || 8001;
 
-function prepareEntityResponse() {
-  return pluginCache.get().then(function (pluginList) {
-    var entity = {json: JSON.stringify(pluginList)};
-    var shasum = crypto.createHash('sha1');
-
-    shasum.update(entity.json);
-    entity.etag = shasum.digest('hex');
-
-    return Q(entity);
-  });
+function createETagForPluginList(pluginList) {
+  var shasum = crypto.createHash('sha1');
+  shasum.update(JSON.stringify(pluginList));
+  return shasum.digest('hex');
 }
 
 function serveList(req, res, next) {
-  prepareEntityResponse().then(function (entity) {
+  pluginCache.get().then(function (pluginList) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('ETag', entity.etag);
-    if (req.headers['if-none-match'] === entity.etag) {
+    var etag = createETagForPluginList(pluginList);
+    res.setHeader('ETag', etag);
+    if (req.headers['if-none-match'] === etag) {
       res.statusCode = 304;
       res.end();
       return;
     }
+
     res.statusCode = 200;
-    res.end(new Buffer(entity.json));
+    res.end(new Buffer(JSON.stringify(pluginList)));
   }).fail(next);
 }
 

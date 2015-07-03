@@ -69,12 +69,12 @@ function getGithubStats(list) {
     var d = Q.defer();
     var re = /github\.com\/([\w\-\.]+)\/([\w\-\.]+)/i;
 
-    if (!el.gitURL) {
-      console.log('getGithubStats:', 'No gitURL', el);
+    var parsedUrl;
+    if (el.gitURL) {
+      parsedUrl = re.exec(el.gitURL && el.gitURL.replace(/\.git$/, ''));
     }
 
-    var parsedUrl = re.exec(el.gitURL && el.gitURL.replace(/\.git$/, ''));
-    // only return components from github
+    // Only return components from github
     if (!parsedUrl) {
       d.resolve();
       return d.promise;
@@ -103,8 +103,6 @@ function getGithubStats(list) {
       } else {
         d.resolve(createComponentData(el, data));
       }
-
-      return d.promise;
     });
 
     return d.promise;
