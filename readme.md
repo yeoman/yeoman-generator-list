@@ -4,11 +4,14 @@
 
 Generates a list of all Yeoman generators as JSON and serves it via HTTP.
 
+Side note: This tool is actually generic and can work for any npm package.
+
 ## Setting your environment
 
 1. [Register a new OAuth app](https://github.com/settings/applications/new) on GitHub. This is needed since GitHub allows more API usage for registered apps.
 2. Set the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` from your newly created app.
 3. Remember set the `NODE_ENV` to `production` when you deploy.
+4. (optionnal) You can set the `NPM_LIST_KEYWORD` environment variable if you wish to search npm packages matching a custom keyword.
 
 You can change the port by setting the `PORT` environment variable.
 
