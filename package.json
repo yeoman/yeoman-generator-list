@@ -1,6 +1,6 @@
 {
   "name": "yeoman-generator-list",
-  "description": "List of all Yeoman generators with GitHub metadata",
+  "description": "The server for the Yeoman generator list on yeoman.io/generators/",
   "repository": "yeoman/yeoman-generator-list",
   "keywords": [
     "yeoman",
@@ -10,21 +10,18 @@
     "keyword",
     "package",
     "packages",
-    "list"
+    "list",
+    "server"
   ],
   "author": "Yeoman",
   "license": "BSD",
   "dependencies": {
     "compression": "^1.4.3",
-    "connect": "^3.3.3",
+    "connect": "^3.4.0",
     "connect-timeout": "^1.4.0",
     "errorhandler": "^1.3.0",
-    "gh-got": "^1.0.2",
-    "lodash": "^3.7.0",
     "morgan": "^1.5.0",
-    "npm-keyword": "^1.1.1",
-    "package-json": "^1.1.0",
-    "q": "^1.1.2"
+    "yeoman-plugin-cache": ">=0.0.3"
   },
   "engines": {
     "node": ">=0.12.0"

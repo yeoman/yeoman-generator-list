@@ -1,19 +1,54 @@
 # yeoman-generator-list
 
-> List of all Yeoman generators with GitHub metadata
+> Serves a list of all Yeoman generators as JSON via HTTP.
 
-Generates a list of all Yeoman generators as JSON and serves it via HTTP.
+## Configuring the Environment
 
-Side note: This tool is actually generic and can work for any npm package.
+### Variables
 
-## Setting your environment
+#### `NODE_ENV`
 
-1. [Register a new OAuth app](https://github.com/settings/applications/new) on GitHub. This is needed since GitHub allows more API usage for registered apps.
-2. Set the environment variables `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` from your newly created app.
-3. Remember set the `NODE_ENV` to `production` when you deploy.
-4. (optional) You can set the `NPM_LIST_KEYWORD` environment variable if you wish to search npm packages matching a custom keyword.
+*(optional)* Default: `development`
 
-You can change the port by setting the `PORT` environment variable.
+Used to set the defaults for most other variables.
+
+**Remember set the `NODE_ENV` to `production` when you deploy.**
+
+#### `NPM_LIST_KEYWORD`
+
+*(optional)* Default: `yeoman-generator`
+
+You can set the `NPM_LIST_KEYWORD` environment variable if you wish to search npm packages matching a custom keyword.
+
+#### `NPM_LIST_LIMIT`
+
+*(optional)* Default:
+ - development: 100
+ - production: 5000
+
+Sets the number of GitHub queries to max out at. It is low in development so the rate limit is not hit. 5000 is the current per hour limit so that is what production is set to.
+
+#### `PORT`
+
+*(optional)* Default:
+ - development: 8001
+ - production: 80
+
+The port number for the server to listen on.
+
+#### `UPDATE_INTERVAL_IN_SECONDS`
+*(optional)* Default: 3610
+
+The time between when the list is refreshed in seconds. GitHub's API refresh time is one hour so set it a little longer than that.
+
+#### `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`
+**(required)**
+
+These are the properties to be able to use the GitHub API. These are needed since GitHub allows more API usage for registered apps.
+
+You can get them by [registering a new OAuth app](https://github.com/settings/applications/new) on GitHub.
+
+These are not actually used directly in this project but are used by its dependencies.
 
 ## Running with Docker (using Heroku toolbelt)
 
