@@ -1,15 +1,24 @@
 'use strict';
-var crypto = require('crypto');
-var Q = require('q');
-var connect = require('connect');
-var morgan = require('morgan');
-var errorhandler = require('errorhandler');
-var timeout = require('connect-timeout');
+
+/* Libraries */
 var compression = require('compression');
-var pluginCache = require('./');
+var connect = require('connect');
+var crypto = require('crypto');
+var errorhandler = require('errorhandler');
+var morgan = require('morgan');
+var pluginCache = require('./plugin-cache');
+var timeout = require('connect-timeout');
 
-var HTTP_PORT = process.env.PORT || 8001;
 
+/* env Variables */
+var nodeEnv = process.env.NODE_ENV || 'development';
+var envDev = nodeEnv === 'development';
+var npmListKeyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
+var apiLimit = process.env.NPM_LIST_LIMIT || (envDev ? 100 : 5000);
+var httpPort = process.env.PORT || (envDev ? 8001 : 80);
+var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
+
+/* Helper functions */
 function createETagForPluginList(pluginList) {
   var shasum = crypto.createHash('sha1');
   shasum.update(JSON.stringify(pluginList));
@@ -33,18 +42,23 @@ function serveList(req, res, next) {
   }).fail(next);
 }
 
-pluginCache.start();
-var app = connect();
+/* Plugin Cache operations */
+var pluginCache = new pluginCache(npmListKeyword, apiLimit);
+pluginCache.on('updated', function (data) {
+  setTimeout(function () {
+    pluginCache.update(npmListKeyword, apiLimit)
+  }, updateInterval * 1000);
+});
 
-if (process.env.NODE_ENV === 'development') {
+
+/* Server Setup */
+var app = connect();
+if (envDev) {
   app.use(errorhandler())
 }
-
 app.use(morgan('dev'))
   .use(timeout(10000))
   .use(compression())
   .use(serveList);
-
-app.listen(HTTP_PORT);
-
-console.log('Server running on port', HTTP_PORT);
+app.listen(httpPort);
+console.log('Server running on port', httpPort);
