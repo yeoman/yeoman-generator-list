@@ -23,6 +23,7 @@
     "gh-got": "^1.1.0",
     "github-url-to-object": "^1.5.2",
     "morgan": "^1.5.0",
+    "newrelic": "^1.22.0",
     "npm-keyword": "^3.0.0",
     "package-json": "^1.2.0",
     "q": "^1.4.1"
