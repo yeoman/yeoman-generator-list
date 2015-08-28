@@ -52,18 +52,21 @@ These are not actually used directly in this project but are used by its depende
 
 ## Running with Docker (using Heroku toolbelt)
 
-We'll assume you're using [boot2docker](http://boot2docker.io/) on OSx. Steps may vary on other platforms.
+We'll assume you're using [Docker Toolbox](https://www.docker.com/toolbox) on OSx. Steps may vary on other platforms.
 
-Read [Heroku documentation](https://blog.heroku.com/archives/2015/5/5/introducing_heroku_docker_release_build_deploy_heroku_apps_with_docker) for full details on running an app as a docker container.
+Read [Heroku documentation](https://devcenter.heroku.com/articles/docker) for full details on running an app as a docker container.
 
 To run the project locally:
 
 ```bash
 # Start docker
-boot2docker up
+docker-machine start default
+
+# Make sure you source the environment
+eval "$(docker-machine env default)"
 
 # Then start the app
-heroku docker:start
+docker-compose up web
 ```
 
 To deploy to Heroku:
