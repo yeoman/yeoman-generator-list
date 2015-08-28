@@ -1,5 +1,4 @@
 'use strict';
-require('newrelic');
 var compression = require('compression');
 var connect = require('connect');
 var crypto = require('crypto');
