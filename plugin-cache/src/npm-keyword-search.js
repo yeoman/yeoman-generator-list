@@ -12,7 +12,7 @@ module.exports = function (keyword) {
 
   npmKeyword.names(keyword, function (err, packages) {
     if (err) {
-      log.error('Unable to search for keywords', err);
+      log.error('Unable to search for keywords ', err);
       d.reject(err);
       return;
     }

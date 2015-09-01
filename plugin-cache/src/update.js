@@ -18,7 +18,7 @@ module.exports = function (keyword, limit) {
       return ghStats(data, limit);
     })
     .catch(function (err) {
-      log.error('error while fetching list', err);
+      log.error('Could not updated the list ', err);
       Q.reject(err);
       return;
     });

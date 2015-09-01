@@ -65,7 +65,7 @@ module.exports = function (list, limit) {
     });
   })
   .catch(function (err) {
-    log.error('Could not fetch GH stats', err);
+    log.error('Could not fetch GH stats ', err);
     Q.reject(err);
     return;
   });

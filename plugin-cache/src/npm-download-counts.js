@@ -62,7 +62,7 @@ module.exports = function (list) {
     });
   })
   .catch(function (err) {
-    log.error('Could not get download counts', err);
+    log.error('Could not get download counts ', err);
     Q.reject(err);
     return;
   });

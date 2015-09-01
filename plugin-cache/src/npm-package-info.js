@@ -13,7 +13,7 @@ module.exports = function (list) {
 
     packageJson(plugin, function (err, pkg) {
       if (err) {
-        log.error('Unable to fetch package info for %s', err);
+        log.error('Unable to fetch package info for %s ', plugin, err);
         d.reject(err);
         return;
       }
@@ -44,7 +44,7 @@ module.exports = function (list) {
     return list;
   })
   .catch(function (err) {
-    log.error('Could not fetch package info', err);
+    log.error('Could not fetch package info ', err);
     Q.reject(err);
     return;
   });
