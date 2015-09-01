@@ -1,6 +1,16 @@
 'use strict';
 
-require('newrelic');
+/* env Variables */
+var nodeEnv = process.env.NODE_ENV || 'development';
+var envDev = nodeEnv === 'development';
+var npmListKeyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
+var apiLimit = process.env.NPM_LIST_LIMIT || (envDev ? 100 : 5000);
+var httpPort = process.env.PORT || (envDev ? 8001 : 80);
+var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
+
+if (!envDev) {
+  require('newrelic');
+}
 
 var compression = require('compression');
 var connect = require('connect');
@@ -10,14 +20,6 @@ var morgan = require('morgan');
 var pluginCache = require('./plugin-cache');
 var timeout = require('connect-timeout');
 
-
-/* env Variables */
-var nodeEnv = process.env.NODE_ENV || 'development';
-var envDev = nodeEnv === 'development';
-var npmListKeyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
-var apiLimit = process.env.NPM_LIST_LIMIT || (envDev ? 100 : 5000);
-var httpPort = process.env.PORT || (envDev ? 8001 : 80);
-var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
 
 /* Helper functions */
 function createETagForPluginList(pluginList) {
