@@ -1,5 +1,18 @@
 'use strict';
 
+function cleanupDescription(str) {
+  str = str.trim()
+    .replace(/:\w+:/, '') // remove GitHub emojis
+    .replace(/ ?generator for (?:yeoman|yo) ?/i, '')
+    .replace(/(?:a )?(?:yeoman|yo) (?:generator (?:for|to|that|which)?)?/i, '')
+    .replace(/(?:yeoman|yo) generator$/i, '')
+    .replace(/ ?application ?/i, 'app')
+    .trim()
+    .replace(/\.$/, '');
+  str = str.charAt(0).toUpperCase() + str.slice(1);
+  return str;
+}
+  
 module.exports = function (npm, gh) {
   gh = gh || {};
 
@@ -19,7 +32,7 @@ module.exports = function (npm, gh) {
 
   return {
     name: npm.name,
-    description: description || '',
+    description: cleanupDescription(description) || '',
     stars: gh.stargazers_count || 0,
     downloads: npm.downloads,
     website: npm.website || gh.html_url || '',
