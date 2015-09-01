@@ -1,6 +1,10 @@
 'use strict';
 
 function cleanupDescription(str) {
+  if (!str) {
+    return str;
+  }
+
   str = str.trim()
     .replace(/:\w+:/, '') // remove GitHub emojis
     .replace(/ ?generator for (?:yeoman|yo) ?/i, '')
@@ -12,7 +16,7 @@ function cleanupDescription(str) {
   str = str.charAt(0).toUpperCase() + str.slice(1);
   return str;
 }
-  
+
 module.exports = function (npm, gh) {
   gh = gh || {};
 
@@ -27,12 +31,12 @@ module.exports = function (npm, gh) {
     description = npm.description || gh.description;
   }
 
-  var ownerWebsite = npm.author && npm.author.url
+  var ownerWebsite = npm.author && npm.author.url;
   ownerWebsite = ownerWebsite || gh.owner && gh.owner.html_url;
 
   return {
     name: npm.name,
-    description: cleanupDescription(description) || '',
+    description: cleanupDescription(description || ''),
     stars: gh.stargazers_count || 0,
     downloads: npm.downloads,
     website: npm.website || gh.html_url || '',
