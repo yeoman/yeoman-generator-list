@@ -49,7 +49,7 @@ function serveList(req, res, next) {
 var pluginCache = new pluginCache(npmListKeyword, apiLimit);
 var update = function () {
   pluginCache.update().then(function () {
-    setTimeout(update, updateInterval * 60);
+    setTimeout(update, updateInterval * 1000);
   });
 };
 update();
