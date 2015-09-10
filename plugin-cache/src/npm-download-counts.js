@@ -13,9 +13,8 @@ module.exports = function (list) {
   return Q.allSettled(list.map(function (plugin) {
     var d = Q.defer();
 
-    got(url + encodeURIComponent(plugin.name)).then(function (res) {
-      var parsed = JSON.parse(body);
-      plugin.downloads = parsed.downloads || 0;
+    got(url + encodeURIComponent(plugin.name), {json: true}).then(function (res) {
+      plugin.downloads = res.body.downloads || 0;
       count++;
 
       d.resolve(plugin);
