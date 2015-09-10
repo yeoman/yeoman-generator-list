@@ -40,9 +40,9 @@ function serveList(req, res, next) {
 }
 
 /* Plugin Cache operations */
-var pluginCache = new pluginCache(npmListKeyword, apiLimit);
+var Plugins = new pluginCache(npmListKeyword, apiLimit);
 var update = function () {
-  pluginCache.update().then(function () {
+  Plugins.update().finally(function () {
     setTimeout(update, updateInterval * 1000);
   });
 };
