@@ -20,6 +20,7 @@ var npmListKeyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
 var apiLimit = process.env.NPM_LIST_LIMIT || (envDev ? 100 : 5000);
 var httpPort = process.env.PORT || (envDev ? 8001 : 80);
 var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
+var log = process.env.LOGGER || console;
 
 
 function serveList(req, res, next) {
@@ -50,11 +51,11 @@ update();
 /* Server Setup */
 var app = connect();
 if (envDev) {
-  app.use(errorhandler())
+  app.use(errorhandler());
 }
 app.use(morgan('dev'))
   .use(timeout(10000))
   .use(compression())
   .use(serveList);
 app.listen(httpPort);
-console.log('Server running on port', httpPort);
+log.info('Server running on port %s', httpPort);
