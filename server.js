@@ -1,4 +1,15 @@
 'use strict';
+var compression = require('compression');
+var connect = require('connect');
+var crypto = require('crypto');
+var errorhandler = require('errorhandler');
+var morgan = require('morgan');
+var pluginCache = require('./plugin-cache');
+var timeout = require('connect-timeout');
+
+// Set higher maximum http sockets
+require('http').globalAgent.maxSockets = 50;
+require('https').globalAgent.maxSockets = 50;
 
 /* env Variables */
 var nodeEnv = process.env.NODE_ENV || 'development';
@@ -11,15 +22,6 @@ var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
 if (!envDev && process.env.NEW_RELIC_ENABLED) {
   require('newrelic');
 }
-
-var compression = require('compression');
-var connect = require('connect');
-var crypto = require('crypto');
-var errorhandler = require('errorhandler');
-var morgan = require('morgan');
-var pluginCache = require('./plugin-cache');
-var timeout = require('connect-timeout');
-
 
 /* Helper functions */
 function createETagForPluginList(pluginList) {
@@ -53,7 +55,6 @@ var update = function () {
   });
 };
 update();
-
 
 /* Server Setup */
 var app = connect();
