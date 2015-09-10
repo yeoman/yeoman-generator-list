@@ -1,6 +1,6 @@
 web:
   build: .
-  command: 'bash -c ''npm start'''
+  command: 'bash -c "npm start"'
   working_dir: /app/user
   environment:
     PORT: 8080

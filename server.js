@@ -8,8 +8,8 @@ var pluginCache = require('./plugin-cache');
 var timeout = require('connect-timeout');
 
 // Set higher maximum http sockets
-require('http').globalAgent.maxSockets = 50;
-require('https').globalAgent.maxSockets = 50;
+require('http').globalAgent.maxSockets = Infinity;
+require('https').globalAgent.maxSockets = Infinity;
 
 /* env Variables */
 var nodeEnv = process.env.NODE_ENV || 'development';
