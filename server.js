@@ -27,7 +27,7 @@ function serveList(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
 
-  var etag = pluginCache.getETag();
+  var etag = Plugins.getETag();
   res.setHeader('ETag', etag);
   if (req.headers['if-none-match'] === etag) {
     res.statusCode = 304;
@@ -36,7 +36,7 @@ function serveList(req, res, next) {
   }
 
   res.statusCode = 200;
-  pluginCache.getCacheStream().pipe(res);
+  Plugins.getCacheStream().pipe(res);
 }
 
 /* Plugin Cache operations */
