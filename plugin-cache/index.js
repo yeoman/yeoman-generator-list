@@ -32,7 +32,7 @@ module.exports = function (keyword, limit) {
   this.update = function () {
     return updateList(keyword, limit).then(function (data) {
       var json = JSON.stringify(data);
-      var etag = createETag(json);
+      etag = createETag(json);
 
       fs.writeFile(cache, json, function () {
         log.info('Updated: %s generators', data.length);
