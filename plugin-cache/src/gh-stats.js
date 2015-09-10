@@ -44,9 +44,11 @@ module.exports = function (list, limit) {
         headers: {
           'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
         }
-      }, function (err, data, res) {
+      }).then(function (res) {
         count++;
-        d.resolve(merge(plugin, data || {}));
+        d.resolve(merge(plugin, res.body));
+      }).catch(function () {
+        d.resolve(merge(plugin));
       });
     }
 

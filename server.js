@@ -1,7 +1,6 @@
 'use strict';
 var compression = require('compression');
 var connect = require('connect');
-var crypto = require('crypto');
 var errorhandler = require('errorhandler');
 var morgan = require('morgan');
 var pluginCache = require('./plugin-cache');
@@ -23,19 +22,11 @@ if (!envDev && process.env.NEW_RELIC_ENABLED) {
   require('newrelic');
 }
 
-/* Helper functions */
-function createETagForPluginList(pluginList) {
-  var shasum = crypto.createHash('sha1');
-  shasum.update(JSON.stringify(pluginList));
-  return shasum.digest('hex');
-}
-
 function serveList(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
 
-  var pluginList = pluginCache.get();
-  var etag = createETagForPluginList(pluginList);
+  var etag = pluginCache.getETag();
   res.setHeader('ETag', etag);
   if (req.headers['if-none-match'] === etag) {
     res.statusCode = 304;
@@ -44,7 +35,7 @@ function serveList(req, res, next) {
   }
 
   res.statusCode = 200;
-  res.end(new Buffer(JSON.stringify(pluginList)));
+  pluginCache.getCacheStream().pipe(res);
 }
 
 /* Plugin Cache operations */

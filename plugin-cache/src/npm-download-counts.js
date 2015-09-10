@@ -13,24 +13,14 @@ module.exports = function (list) {
   return Q.allSettled(list.map(function (plugin) {
     var d = Q.defer();
 
-    got(url + encodeURIComponent(plugin.name), function (err, res) {
-      // Failures here should not prevent the list from moving on
-      if (err) {
-        d.resolve(plugin);
-        return;
-      }
-
-      var parsed;
-      try {
-        parsed = JSON.parse(body);
-      } catch (e) {
-        d.resolve(plugin);
-        return;
-      }
-
+    got(url + encodeURIComponent(plugin.name)).then(function (res) {
+      var parsed = JSON.parse(body);
       plugin.downloads = parsed.downloads || 0;
       count++;
 
+      d.resolve(plugin);
+    }).catch(function () {
+      // Failures here should not prevent the list from moving on
       d.resolve(plugin);
     });
 
