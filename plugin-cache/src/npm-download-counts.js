@@ -1,12 +1,9 @@
 'use strict';
-
-var http = require('https');
+var got = require('got');
 var Q = require('q');
-var packageJson = require('package-json');
 
 var log = process.env.LOGGER || console;
 
-// Failures here should not prevent the list from moving on
 module.exports = function (list) {
   log.info('Getting downloads for %s packages', list.length);
 
@@ -16,36 +13,26 @@ module.exports = function (list) {
   return Q.allSettled(list.map(function (plugin) {
     var d = Q.defer();
 
-    try {
-      http.get(url + encodeURIComponent(plugin.name), function (res) {
-        res.setEncoding('utf-8');
-
-        var body = '';
-        res.on('data', function (data) {
-          body += data;
-        });
-
-        res.on('end', function () {
-          var parsed;
-          try {
-            parsed = JSON.parse(body);
-          } catch (e) {
-            d.resolve(plugin);
-            return;
-          }
-
-          plugin.downloads = parsed.downloads || 0;
-          count++;
-
-          d.resolve(plugin);
-        });
-      })
-      .on('error', function () {
+    got(url + encodeURIComponent(plugin.name), function (err, res) {
+      // Failures here should not prevent the list from moving on
+      if (err) {
         d.resolve(plugin);
-      });
-    } catch (e) {
+        return;
+      }
+
+      var parsed;
+      try {
+        parsed = JSON.parse(body);
+      } catch (e) {
+        d.resolve(plugin);
+        return;
+      }
+
+      plugin.downloads = parsed.downloads || 0;
+      count++;
+
       d.resolve(plugin);
-    }
+    });
 
     return d.promise;
   }))

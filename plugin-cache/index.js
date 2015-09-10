@@ -14,7 +14,8 @@ module.exports = function (keyword, limit) {
 
   this.get = function () {
     return list;
-  }
+  };
+
   this.update = function () {
     return updateList(keyword, limit).then(function (data) {
       log.info('Updated: %s generators', data.length);
