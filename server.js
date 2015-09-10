@@ -1,4 +1,7 @@
 'use strict';
+if (process.env.NEW_RELIC_ENABLED) {
+  require('newrelic');
+}
 var compression = require('compression');
 var connect = require('connect');
 var errorhandler = require('errorhandler');
@@ -18,9 +21,6 @@ var apiLimit = process.env.NPM_LIST_LIMIT || (envDev ? 100 : 5000);
 var httpPort = process.env.PORT || (envDev ? 8001 : 80);
 var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
 
-if (!envDev && process.env.NEW_RELIC_ENABLED) {
-  require('newrelic');
-}
 
 function serveList(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
