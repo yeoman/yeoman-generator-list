@@ -18,7 +18,9 @@ module.exports = function (keyword) {
     }
 
     log.info('Found %s packages', packages.length);
-    d.resolve(packages);
+    d.resolve(packages.filter(function (pkg) {
+      return pkg.indexOf('generator-') === 0;
+    }));
   });
 
   return d.promise;
