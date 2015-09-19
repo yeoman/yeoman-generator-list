@@ -35,12 +35,15 @@ module.exports = function (npm, gh) {
   ownerWebsite = ownerWebsite || gh.owner && gh.owner.html_url;
 
   return {
-    name: npm.name,
+    name: npm.name.replace(/^generator-/, ''),
     description: cleanupDescription(description || ''),
     stars: gh.stargazers_count || 0,
     downloads: npm.downloads,
-    website: npm.website || gh.html_url || '',
-    owner: npm.author && npm.author.name || gh.owner && gh.owner.login || '',
-    ownerWebsite: ownerWebsite || '',
+    site: npm.website || gh.html_url || '',
+    owner: {
+      name: npm.author && npm.author.name || gh.owner && gh.owner.login || '',
+      site: ownerWebsite || ''
+    },
+    updated: npm.updated
   };
 };
