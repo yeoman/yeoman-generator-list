@@ -1,6 +1,7 @@
 'use strict';
 var crypto = require('crypto');
 var fs = require('fs');
+var os = require('os');
 var path = require('path');
 var updateList = require('./src/update');
 
@@ -19,7 +20,14 @@ module.exports = function (keyword, limit) {
   }
 
   var etag = null;
-  var cache = path.join(__dirname, 'cache/cache.json');
+  var cache = path.join(os.tmpdir(), 'yeoman-generator-list/cache.json');
+  try {
+    fs.readFileSync(cache);
+  }
+  catch (e) {
+    fs.mkdirSync(cache.split('/').slice(0, -1).join('/'));
+    fs.writeFileSync(cache, '[]');
+  }
 
   this.getETag = function () {
     return etag;
