@@ -24,7 +24,8 @@ module.exports = function (list) {
         name: pkg.name,
         repo: pkg.repository && pkg.repository.type === 'git' ?
           pkg.repository.url : false,
-        website: pkg.homepage || false
+        website: pkg.homepage || false,
+        updated: pkg.time.modified || pkg.time.created || ''
       });
     });
 
