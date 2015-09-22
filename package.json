@@ -23,6 +23,7 @@
     "gh-got": "^2.0.0",
     "github-url-to-object": "^1.5.2",
     "got": "^4.2.0",
+    "mkdirp": "^0.5.1",
     "morgan": "^1.5.0",
     "newrelic": "^1.22.0",
     "npm-keyword": "^3.0.0",

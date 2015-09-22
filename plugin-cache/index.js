@@ -1,6 +1,7 @@
 'use strict';
 var crypto = require('crypto');
 var fs = require('fs');
+var mkdirp = require('mkdirp');
 var os = require('os');
 var path = require('path');
 var updateList = require('./src/update');
@@ -25,7 +26,7 @@ module.exports = function (keyword, limit) {
     fs.readFileSync(cache);
   }
   catch (e) {
-    fs.mkdirSync(path.dirname(cache));
+    mkdirp.sync(path.dirname(cache));
     fs.writeFileSync(cache, '[]');
   }
 
