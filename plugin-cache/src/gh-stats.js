@@ -33,7 +33,7 @@ module.exports = function (list, limit) {
       limitMessage = true;
     }
 
-    if (!plugin.repo || (limit && limit < ++count)) {
+    if (!plugin.repo || (limit && limit < count)) {
       d.resolve(merge(plugin));
     } else {
       ghGot('repos/' + plugin.repo, {
