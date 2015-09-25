@@ -30,6 +30,8 @@ module.exports = function (keyword, limit) {
     fs.writeFileSync(cache, '[]');
   }
 
+  log.info('Cache file created at %s', cache);
+
   this.getETag = function () {
     return etag;
   };
