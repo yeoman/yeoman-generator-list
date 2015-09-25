@@ -14,10 +14,8 @@ var bucket = process.env.GCLOUD_BUCKET || 'yeoman-generator-list';
 var keyFilename = process.env.GCLOUD_KEYFILENAME;
 var log = process.env.LOGGER || console;
 
-var fs = require('fs');
 var gcloud = require('gcloud');
-var q = require('q');
-var pluginCache = require('./plugin-cache')
+var pluginCache = require('./plugin-cache');
 
 var gconfig = {
   projectId: projectId
@@ -25,7 +23,7 @@ var gconfig = {
 if (keyFilename) {
   gconfig.keyFilename = keyFilename;
 }
-var bucket = gcloud(gconfig).storage().bucket(bucket)
+var bucket = gcloud(gconfig).storage().bucket(bucket);
 
 /* Plugin Cache operations */
 var Plugins = new pluginCache(npmListKeyword, apiLimit);
@@ -37,7 +35,6 @@ var update = function () {
       gzip: true,
       metadata: {
         contentType: 'application/json',
-        cacheControl: 'max-age=3600',
         metadata: {
           'ETag': Plugins.getETag()
         }
@@ -48,14 +45,6 @@ var update = function () {
     })
     .on('finish', function () {
       log.info('Pushed cache to CDN');
-      file.makePublic(function (err) {
-        if (err) {
-          log.error('Error updating the published cache metadata: ', err);
-        }
-        else {
-          log.info('Updated published list metadata');
-        }
-      });
     });
 
     setTimeout(update, updateInterval * 1000);
