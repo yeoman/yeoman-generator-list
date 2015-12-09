@@ -6,38 +6,23 @@
 
 ### Variables
 
-#### `NODE_ENV`
-
-*(optional)* Default: `development`
-
-Used to set the defaults for most other variables.
-
-**Remember set the `NODE_ENV` to `production` when you deploy.**
-
 #### `NPM_LIST_KEYWORD`
 
-*(optional)* Default: `yeoman-generator`
+*(optional)*
+Default: `yeoman-generator`
 
 You can set the `NPM_LIST_KEYWORD` environment variable if you wish to search npm packages matching a custom keyword.
 
-#### `NPM_LIST_LIMIT`
+#### `GH_LIST_LIMIT`
 
-*(optional)* Default:
- - development: 100
- - production: 5000
+*(optional)*
+No Default
 
-Sets the number of GitHub queries to max out at. It is low in development so the rate limit is not hit. 5000 is the current per hour limit so that is what production is set to.
-
-#### `PORT`
-
-*(optional)* Default:
- - development: 8001
- - production: 80
-
-The port number for the server to listen on.
+Sets the number of GitHub queries to max out at. It should be low in development so the rate limit is not hit. 5000 is the current per hour limit that Github has defined.
 
 #### `UPDATE_INTERVAL_IN_SECONDS`
-*(optional)* Default: 3610
+*(optional)*
+Default: 3610
 
 The time between when the list is refreshed in seconds. GitHub's API refresh time is one hour so set it a little longer than that.
 
@@ -48,13 +33,23 @@ These are the properties to be able to use the GitHub API. These are needed sinc
 
 You can get them by [registering a new OAuth app](https://github.com/settings/applications/new) on GitHub.
 
-These are not actually used directly in this project but are used by its dependencies.
+#### NewRelic
+
+ - NEW_RELIC_APP_NAME
+ - NEW_RELIC_LICENSE_KEY
+ - NEW_RELIC_LOG_LEVEL
+
+#### Google Cloud Storage
+
+ - GCLOUD_PROJECT_ID
+ - GCLOUD_BUCKET
+ - GCLOUD_KEYFILENAME: JSON File relative to this project that has the gcloud credentials
 
 ## Running with Docker (using Heroku toolbelt)
 
-We'll assume you're using [Docker Toolbox](https://www.docker.com/toolbox) on OSx. Steps may vary on other platforms.
+TODO: *(needs updated instructions)*
 
-Read [Heroku documentation](https://devcenter.heroku.com/articles/docker) for full details on running an app as a docker container.
+We'll assume you're using [Docker Toolbox](https://www.docker.com/toolbox) on OSx. Steps may vary on other platforms.
 
 To run the project locally:
 
@@ -69,16 +64,10 @@ eval "$(docker-machine env default)"
 docker-compose up web
 ```
 
-To deploy to Heroku:
-
-```bash
-heroku docker:release
-```
-
 ## Running manually
 
 - Install dependencies: `$ npm install`
-- Run `npm start && open http://localhost:8001`
+- Run `npm start`
 
 ## License
 

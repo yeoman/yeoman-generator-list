@@ -1,7 +1,0 @@
-{
-  "name": "yeoman-generator-list",
-  "image": "heroku/nodejs",
-  "addons": [
-    "newrelic"
-  ]
-}

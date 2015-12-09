@@ -1,0 +1,15 @@
+module.exports = [
+  'generator-angular-js',
+  'generator-angular-phonegap',
+  'generator-angular-sparkstack',
+  'generator-ayrofast',
+  'generator-charcoal',
+  'generator-express-angular',
+  'generator-ionicjs',
+  'generator-meteor-abtx',
+  'generator-mtb-app',
+  'generator-onereq',
+  'generator-react-coffee-webpack',
+  'generator-wordpress-bob',
+  'generator-polymer-plus'
+];
