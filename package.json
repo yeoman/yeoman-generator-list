@@ -2,49 +2,35 @@
   "name": "yeoman-generator-list",
   "description": "Server for the Yeoman generator list on yeoman.io/generators",
   "repository": "yeoman/yeoman-generator-list",
-  "keywords": [
-    "generator",
-    "github",
-    "keyword",
-    "list",
-    "npm",
-    "package",
-    "packages",
-    "server",
-    "yeoman"
-  ],
   "author": "Yeoman",
-  "license": "BSD",
+  "license": "BSD-2-Clauses",
   "dependencies": {
-    "compression": "^1.4.3",
-    "connect": "^3.4.0",
-    "connect-timeout": "^1.4.0",
-    "errorhandler": "^1.3.0",
-    "gcloud": "^0.23.0",
-    "gh-got": "^2.0.0",
-    "github-url-to-object": "^1.5.2",
-    "got": "^4.2.0",
-    "mkdirp": "^0.5.1",
-    "morgan": "^1.5.0",
-    "newrelic": "^1.22.0",
-    "npm-keyword": "^3.0.0",
-    "package-json": "^1.2.0",
-    "q": "^1.4.1"
+    "gcloud": "^0.25.1",
+    "gh-got": "^2.3.0",
+    "github-url-to-object": "^2.1.0",
+    "moment": "^2.10.6",
+    "newrelic": "^1.24.0",
+    "npm-keyword": "^4.2.0",
+    "package-json": "^2.2.1"
   },
   "devDependencies": {
     "eslint": "^1.10.3",
-    "eslint-config-xo-space": "^0.7.0",
-    "mocha": "^2.2.5"
-  },
-  "scripts": {
-    "test": "eslint ."
+    "eslint-config-xo-space": "^0.7.0"
   },
   "engines": {
     "node": ">=4.0.0"
   },
-  "start": "node server.js",
-  "private": true,
+  "main": "generator.js",
+  "files": [
+    "src",
+    "generator.js"
+  ],
   "eslintConfig": {
     "extends": "xo-space"
-  }
+  },
+  "scripts": {
+    "start": "node generator.js",
+    "test": "eslint ."
+  },
+  "private": true
 }
