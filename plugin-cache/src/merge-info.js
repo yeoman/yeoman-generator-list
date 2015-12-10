@@ -6,7 +6,8 @@ function cleanupDescription(str) {
   }
 
   str = str.trim()
-    .replace(/:\w+:/, '') // remove GitHub emojis
+    // Remove GitHub emojis
+    .replace(/:\w+:/, '')
     .replace(/ ?generator for (?:yeoman|yo) ?/i, '')
     .replace(/(?:a )?(?:yeoman|yo) (?:generator (?:for|to|that|which)?)?/i, '')
     .replace(/(?:yeoman|yo) generator$/i, '')

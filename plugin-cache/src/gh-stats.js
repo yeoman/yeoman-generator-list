@@ -38,8 +38,8 @@ module.exports = function (list, limit) {
     } else {
       ghGot('repos/' + plugin.repo, {
         query: {
-          client_id: process.env.GITHUB_CLIENT_ID,
-          client_secret: process.env.GITHUB_CLIENT_SECRET
+          client_id: process.env.GITHUB_CLIENT_ID, // eslint-disable-line camelcase
+          client_secret: process.env.GITHUB_CLIENT_SECRET // eslint-disable-line camelcase
         },
         headers: {
           'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
