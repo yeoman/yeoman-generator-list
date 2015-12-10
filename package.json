@@ -32,7 +32,18 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
+    "eslint": "^1.10.3",
     "mocha": "^2.2.5"
+  },
+  "eslintConfig": {
+    "extends": "xo-space",
+    "rules": {
+      "camelcase": 0,
+      "no-inline-comments": 0
+    }
+  },
+  "scripts": {
+    "test": "eslint ."
   },
   "engines": {
     "node": ">=4.0.0"
