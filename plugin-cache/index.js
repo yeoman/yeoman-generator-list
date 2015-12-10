@@ -24,7 +24,8 @@ module.exports = function (keyword, limit) {
   var cache = path.join(os.tmpdir(), 'yeoman-generator-list', 'cache.json');
   try {
     fs.readFileSync(cache);
-  } catch (e) {
+  }
+  catch (e) {
     mkdirp.sync(path.dirname(cache));
     fs.writeFileSync(cache, '[]');
   }

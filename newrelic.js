@@ -21,4 +21,4 @@ exports.config = {
      */
     level: process.env.NEW_RELIC_LOG_LEVEL
   }
-};
+}

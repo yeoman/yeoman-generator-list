@@ -6,7 +6,7 @@ var compression = require('compression');
 var connect = require('connect');
 var errorhandler = require('errorhandler');
 var morgan = require('morgan');
-var PluginCache = require('./plugin-cache');
+var pluginCache = require('./plugin-cache');
 var timeout = require('connect-timeout');
 
 // Set higher maximum http sockets
@@ -22,15 +22,8 @@ var httpPort = process.env.PORT || (envDev ? 8001 : 80);
 var updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
 var log = process.env.LOGGER || console;
 
-/* Plugin Cache operations */
-var Plugins = new PluginCache(npmListKeyword, apiLimit);
-var update = function () {
-  Plugins.update().finally(function () {
-    setTimeout(update, updateInterval * 1000);
-  });
-};
 
-function serveList(req, res) {
+function serveList(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
 
@@ -46,6 +39,13 @@ function serveList(req, res) {
   Plugins.getCacheStream().pipe(res);
 }
 
+/* Plugin Cache operations */
+var Plugins = new pluginCache(npmListKeyword, apiLimit);
+var update = function () {
+  Plugins.update().finally(function () {
+    setTimeout(update, updateInterval * 1000);
+  });
+};
 update();
 
 /* Server Setup */

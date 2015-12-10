@@ -15,7 +15,7 @@ var keyFilename = process.env.GCLOUD_KEYFILENAME;
 var log = process.env.LOGGER || console;
 
 var gcloud = require('gcloud');
-var PluginCache = require('./plugin-cache');
+var pluginCache = require('./plugin-cache');
 
 var gconfig = {
   projectId: projectId
@@ -23,10 +23,10 @@ var gconfig = {
 if (keyFilename) {
   gconfig.keyFilename = keyFilename;
 }
-bucket = gcloud(gconfig).storage().bucket(bucket);
+var bucket = gcloud(gconfig).storage().bucket(bucket);
 
 /* Plugin Cache operations */
-var Plugins = new PluginCache(npmListKeyword, apiLimit);
+var Plugins = new pluginCache(npmListKeyword, apiLimit);
 var update = function () {
   Plugins.update().finally(function () {
     var file = bucket.file('cache.json');
@@ -36,11 +36,11 @@ var update = function () {
       metadata: {
         contentType: 'application/json',
         metadata: {
-          ETag: Plugins.getETag()
+          'ETag': Plugins.getETag()
         }
       }
     }))
-    .on('error', function (err) {
+    .on('error', function(err) {
       log.error('Error publishing the list: ', err);
     })
     .on('finish', function () {
