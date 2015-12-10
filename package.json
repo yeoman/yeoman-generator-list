@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "eslint": "^1.10.3",
+    "eslint-config-xo-space": "^0.7.0",
     "mocha": "^2.2.5"
   },
   "scripts": {
