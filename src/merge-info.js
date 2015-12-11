@@ -11,7 +11,7 @@ module.exports = (npm, gh) => {
   return {
     description: cleanupDescription(npm.description || gh.description || ''),
     downloads: npm.downloads,
-    name: npm.name.replace(/^generator-/, ''),
+    name: npm.name.replace(/^generator-/, '').trim(),
     official: ownerWebsite && ownerWebsite === 'https://github.com/yeoman',
     owner: {
       name: npm.author && npm.author.name || gh.owner && gh.owner.login || '',
