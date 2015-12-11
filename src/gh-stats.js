@@ -62,7 +62,7 @@ module.exports = (list, limit) => {
 
         if (err.statusCode === 404) {
           resolve(false);
-          return
+          return;
         }
 
         resolve(merge(pkg));
