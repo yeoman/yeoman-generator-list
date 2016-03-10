@@ -5,6 +5,8 @@ module.exports = [
   'generator-ayrofast',
   'generator-charcoal',
   'generator-express-angular',
+  'generator-fv1',
+  'generator-gulp-webapp',
   'generator-ionicjs',
   'generator-meteor-abtx',
   'generator-mtb-app',
