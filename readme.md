@@ -8,25 +8,27 @@
 
 #### `NPM_LIST_KEYWORD`
 
-*(optional)*
+*(optional)*<br>
 Default: `yeoman-generator`
 
 You can set the `NPM_LIST_KEYWORD` environment variable if you wish to search npm packages matching a custom keyword.
 
 #### `GH_LIST_LIMIT`
 
-*(optional)*
+*(optional)*<br>
 No Default
 
-Sets the number of GitHub queries to max out at. It should be low in development so the rate limit is not hit. 5000 is the current per hour limit that Github has defined.
+Sets the number of GitHub queries to max out at. It should be low in development so the rate limit is not hit. 5000 is the current per hour limit that GitHub has defined.
 
 #### `UPDATE_INTERVAL_IN_SECONDS`
-*(optional)*
+
+*(optional)*<br>
 Default: 3610
 
 The time between when the list is refreshed in seconds. GitHub's API refresh time is one hour so set it a little longer than that.
 
 #### `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`
+
 **(required)**
 
 These are the properties to be able to use the GitHub API. These are needed since GitHub allows more API usage for registered apps.
@@ -53,7 +55,7 @@ We'll assume you're using [Docker Toolbox](https://www.docker.com/toolbox) on ma
 
 To run the project locally:
 
-```bash
+```sh
 # Start docker
 docker-machine start default
 
