@@ -49,7 +49,7 @@ You can get them by [registering a new OAuth app](https://github.com/settings/ap
 
 TODO: *(needs updated instructions)*
 
-We'll assume you're using [Docker Toolbox](https://www.docker.com/toolbox) on OSx. Steps may vary on other platforms.
+We'll assume you're using [Docker Toolbox](https://www.docker.com/toolbox) on macOS. Steps may vary on other platforms.
 
 To run the project locally:
 
