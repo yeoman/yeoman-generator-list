@@ -13,5 +13,10 @@ module.exports = [
   'generator-onereq',
   'generator-react-coffee-webpack',
   'generator-wordpress-bob',
-  'generator-polymer-plus'
+  'generator-polymer-plus',
+  'generator-vmweb',
+  'generator-gulp-angular-pregiotek',
+  'generator-auto',
+  'generator-aspnetdnx',
+  'generator-aspnetdnx2'
 ];
