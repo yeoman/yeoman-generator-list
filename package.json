@@ -5,17 +5,15 @@
   "author": "Yeoman",
   "license": "BSD-2-Clauses",
   "dependencies": {
-    "gcloud": "^0.25.1",
-    "gh-got": "^2.3.0",
-    "github-url-to-object": "^2.1.0",
-    "moment": "^2.10.6",
-    "newrelic": "^1.24.0",
+    "gcloud": "^0.37.0",
+    "got": "^6.5.0",
+    "moment": "^2.15.2",
+    "newrelic": "^1.32.0",
     "npm-keyword": "^4.2.0",
-    "package-json": "^2.2.1"
+    "p-map": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-xo-space": "^0.7.0"
+    "xo": "^0.17.0"
   },
   "engines": {
     "node": ">=4"
@@ -25,12 +23,12 @@
     "src",
     "generator.js"
   ],
-  "eslintConfig": {
-    "extends": "xo-space"
+  "xo": {
+    "space": true
   },
   "scripts": {
     "start": "node generator.js",
-    "test": "eslint ."
+    "test": "xo"
   },
   "private": true
 }

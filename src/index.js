@@ -5,14 +5,14 @@ const log = require('./logger');
 
 module.exports = {
   log: log,
-  update: (keyword, limit) => {
+  update: keyword => {
     if (typeof keyword !== 'string') {
       let msg = 'Index: Keyword is required';
       log.error(msg);
-      throw Error(msg);
+      throw new Error(msg);
     }
 
-    return update(keyword, limit)
+    return update(keyword)
     .then(data => {
       log.info('Index: updated %s generators', data.length);
       data = JSON.stringify(data);
