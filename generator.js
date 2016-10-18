@@ -5,7 +5,6 @@ if (process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
 }
 
 /* env Variables */
-const apiLimit = process.env.GH_LIST_LIMIT;
 const npmListKeyword = process.env.NPM_LIST_KEYWORD || 'yeoman-generator';
 const updateInterval = process.env.UPDATE_INTERVAL_IN_SECONDS || 3610;
 
@@ -23,7 +22,7 @@ const List = require('./src');
   // Be able to run this again
   let runTimeout = () => setTimeout(update, updateInterval * 1000);
 
-  List.update(npmListKeyword, apiLimit)
+  List.update(npmListKeyword)
   .then(response => {
     bucket.file('cache.json').createWriteStream({
       gzip: true,
