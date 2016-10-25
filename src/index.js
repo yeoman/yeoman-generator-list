@@ -9,7 +9,7 @@ module.exports = {
     if (typeof keyword !== 'string') {
       let msg = 'Index: Keyword is required';
       log.error(msg);
-      throw Error(msg);
+      throw new Error(msg);
     }
 
     return update(keyword)

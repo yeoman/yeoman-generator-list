@@ -1,7 +1,7 @@
 'use strict';
 
 if (process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY) {
-  require('newrelic');
+  require('newrelic'); // eslint-disable-line import/no-unassigned-import
 }
 
 /* env Variables */

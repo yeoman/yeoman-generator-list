@@ -33,16 +33,16 @@ function createPromiseUpdatePage(pkg, arrayPackages) {
         const github = response.body.collected.github || {};
 
         let ownerWebsite = metadata.author && metadata.author.url;
-        ownerWebsite = ownerWebsite || metadata.links.repository && metadata.links.repository.replace(`/${pkg}`, '');
+        ownerWebsite = ownerWebsite || (metadata.links.repository && metadata.links.repository.replace(`/${pkg}`, ''));
         ownerWebsite = ownerWebsite || '';
 
         const formattedPkg = {
           description: metadata.description || '',
           downloads: npm.downloads[2].count,
           name: metadata.name.replace(/^generator-/, '').trim(),
-          official: metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/') || false,
+          official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
           owner: {
-            name: metadata.author && metadata.author.name || '',
+            name: (metadata.author && metadata.author.name) || '',
             site: ownerWebsite
           },
           site: metadata.links.homepage || metadata.links.repository || '',
@@ -53,11 +53,11 @@ function createPromiseUpdatePage(pkg, arrayPackages) {
         arrayPackages.push(formattedPkg);
         return arrayPackages;
       })
-      .catch(error => {
+      .catch(err => {
         log.warn(
           'npmsInfo: Could not fetch info for %s package because %s',
           pkg,
-          error
+          err
         );
         return false;
       });
