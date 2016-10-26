@@ -2,66 +2,67 @@
 
 const moment = require('moment');
 const got = require('got');
+const pMap = require('p-map');
 const log = require('./logger');
 
 module.exports = list => {
   log.info('npmsInfo: Fetching info for %s packages', list.length);
-  let arrayPackages = [];
 
-  const arrayFunctionNewPromise = list.map(pkg => createPromiseUpdatePage(pkg, arrayPackages));
+  return pMap(list, fetchInfos, {concurrency: 2})
+    .then(pkgs => {
+      pkgs = pkgs.filter(pkg => Boolean(pkg));
+      log.info('npmInfo: Fetched info for %s valid packages', pkgs.length);
 
-  arrayFunctionNewPromise.push(function () {
-    return arrayPackages;
-  });
-
-  return arrayFunctionNewPromise.reduce((p, fn) => p.then(fn), Promise.resolve());
+      return pkgs;
+    })
+    .catch(err => {
+      console.error(err);
+    });
 };
 
-function createPromiseUpdatePage(pkg, arrayPackages) {
-  return function () {
-    log.info(`\tFetch info for ${pkg}`);
+function fetchInfos(pkg) {
+  log.info(`\tFetch info for ${pkg}`);
 
-    return got(`https://api.npms.io/v2/package/${pkg}`, {
-      json: true,
-      headers: {
-        'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
-      }
+  return got(`https://api.npms.io/v2/package/${pkg}`, {
+    json: true,
+    headers: {
+      'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
+    }
+  })
+    .then(response => {
+      const metadata = response.body.collected.metadata;
+      const npm = response.body.collected.npm;
+      const github = response.body.collected.github || {};
+
+      let ownerWebsite = metadata.author && metadata.author.url;
+      ownerWebsite = ownerWebsite || (metadata.links.repository && metadata.links.repository.replace(`/${pkg}`, ''));
+      ownerWebsite = ownerWebsite || '';
+
+      const formattedPkg = {
+        description: cleanupDescription(metadata.description || ''),
+        downloads: npm.downloads[2].count,
+        name: metadata.name.replace(/^generator-/, '').trim(),
+        official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
+        owner: {
+          name: (metadata.author && metadata.author.name) || '',
+          site: ownerWebsite
+        },
+        site: metadata.links.homepage || metadata.links.repository || '',
+        stars: github.starsCount || 0,
+        timeSince: moment(metadata.date).fromNow(),
+        updated: metadata.date
+      };
+
+      return formattedPkg;
     })
-      .then(response => {
-        const metadata = response.body.collected.metadata;
-        const npm = response.body.collected.npm;
-        const github = response.body.collected.github || {};
-
-        let ownerWebsite = metadata.author && metadata.author.url;
-        ownerWebsite = ownerWebsite || (metadata.links.repository && metadata.links.repository.replace(`/${pkg}`, ''));
-        ownerWebsite = ownerWebsite || '';
-
-        const formattedPkg = {
-          description: cleanupDescription(metadata.description || ''),
-          downloads: npm.downloads[2].count,
-          name: metadata.name.replace(/^generator-/, '').trim(),
-          official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
-          owner: {
-            name: (metadata.author && metadata.author.name) || '',
-            site: ownerWebsite
-          },
-          site: metadata.links.homepage || metadata.links.repository || '',
-          stars: github.starsCount || 0,
-          timeSince: moment(metadata.date).fromNow(),
-          updated: metadata.date
-        };
-        arrayPackages.push(formattedPkg);
-        return arrayPackages;
-      })
-      .catch(err => {
-        log.warn(
-          'npmsInfo: Could not fetch info for %s package because %s',
-          pkg,
-          err
-        );
-        return false;
-      });
-  };
+    .catch(err => {
+      log.warn(
+        'npmsInfo: Could not fetch info for %s package because %s',
+        pkg,
+        err
+      );
+      return false;
+    });
 }
 
 function cleanupDescription(str) {

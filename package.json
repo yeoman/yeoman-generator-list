@@ -9,7 +9,8 @@
     "got": "^6.5.0",
     "moment": "^2.15.2",
     "newrelic": "^1.32.0",
-    "npm-keyword": "^4.2.0"
+    "npm-keyword": "^4.2.0",
+    "p-map": "^1.0.0"
   },
   "devDependencies": {
     "xo": "^0.17.0"
