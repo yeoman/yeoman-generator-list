@@ -37,7 +37,7 @@ function createPromiseUpdatePage(pkg, arrayPackages) {
         ownerWebsite = ownerWebsite || '';
 
         const formattedPkg = {
-          description: metadata.description || '',
+          description: cleanupDescription(metadata.description || ''),
           downloads: npm.downloads[2].count,
           name: metadata.name.replace(/^generator-/, '').trim(),
           official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
@@ -62,4 +62,19 @@ function createPromiseUpdatePage(pkg, arrayPackages) {
         return false;
       });
   };
+}
+
+function cleanupDescription(str) {
+  str = str.trim()
+    // Remove GitHub emojis
+    .replace(/:\w+:/, '')
+    .replace(/ ?generator for (?:yeoman|yo) ?/i, '')
+    .replace(/(?:a )?(?:yeoman|yo) (?:generator (?:for|to|that|which)?)?/i, '')
+    .replace(/(?:yeoman|yo) generator$/i, '')
+    .replace(/ ?application ?/i, 'app')
+    .trim()
+    .replace(/\.$/, '');
+  str = str.charAt(0).toUpperCase() + str.slice(1);
+
+  return str;
 }
