@@ -3,64 +3,72 @@
 const moment = require('moment');
 const got = require('got');
 const pMap = require('p-map');
+
 const log = require('./logger');
 
+const NPMS_MAX_PKG = 250; // https://github.com/npms-io/npms-api/blob/master/lib/routes/package/info.js#L147
+
 module.exports = list => {
-  log.info('npmsInfo: Fetching info for %s packages', list.length);
+  log.info(`npmsInfo: Fetching info for ${list.length} packages split into group of ${NPMS_MAX_PKG} elements`);
+  const groupsPkg = [];
 
-  return pMap(list, fetchInfos, {concurrency: 2})
-    .then(pkgs => {
-      pkgs = pkgs.filter(pkg => Boolean(pkg));
-      log.info('npmInfo: Fetched info for %s valid packages', pkgs.length);
+  while (list.length) {
+    groupsPkg.push(list.splice(0, NPMS_MAX_PKG));
+  }
 
-      return pkgs;
-    })
-    .catch(err => {
-      console.error(err);
+  return pMap(groupsPkg, fetchInfos)
+    .then(formattedGroupsPkg => {
+      formattedGroupsPkg = [].concat(...formattedGroupsPkg);
+
+      formattedGroupsPkg = formattedGroupsPkg.filter(pkg => Boolean(pkg));
+
+      log.info('npmsInfo: Fetched info for %s valid packages', formattedGroupsPkg.length);
+
+      return formattedGroupsPkg;
     });
 };
 
-function fetchInfos(pkg) {
-  log.info(`\tFetch info for ${pkg}`);
-
-  return got(`https://api.npms.io/v2/package/${pkg}`, {
+function fetchInfos(groupPkg) {
+  return got.post('https://api.npms.io/v2/package/mget', {
+    body: JSON.stringify(groupPkg),
     json: true,
     headers: {
-      'user-agent': 'https://github.com/yeoman/yeoman-generator-list'
+      'User-Agent': 'https://github.com/yeoman/yeoman-generator-list',
+      'Content-Type': 'application/json'
     }
   })
     .then(response => {
-      const metadata = response.body.collected.metadata;
-      const npm = response.body.collected.npm;
-      const github = response.body.collected.github || {};
+      return Object.keys(response.body).map(pkgName => {
+        const pkg = response.body[pkgName];
 
-      let ownerWebsite = metadata.author && metadata.author.url;
-      ownerWebsite = ownerWebsite || (metadata.links.repository && metadata.links.repository.replace(`/${pkg}`, ''));
-      ownerWebsite = ownerWebsite || '';
+        const metadata = pkg.collected.metadata;
+        const npm = pkg.collected.npm;
+        const github = pkg.collected.github || {};
 
-      const formattedPkg = {
-        description: cleanupDescription(metadata.description || ''),
-        downloads: npm.downloads[2].count,
-        name: metadata.name.replace(/^generator-/, '').trim(),
-        official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
-        owner: {
-          name: (metadata.author && metadata.author.name) || '',
-          site: ownerWebsite
-        },
-        site: metadata.links.homepage || metadata.links.repository || '',
-        stars: github.starsCount || 0,
-        timeSince: moment(metadata.date).fromNow(),
-        updated: metadata.date
-      };
+        let ownerWebsite = metadata.author && metadata.author.url;
+        ownerWebsite = ownerWebsite || (metadata.links.repository && metadata.links.repository.replace(`/${metadata.name}`, ''));
+        ownerWebsite = ownerWebsite || '';
 
-      return formattedPkg;
+        const formattedPkg = {
+          description: cleanupDescription(metadata.description || ''),
+          downloads: npm.downloads[2].count,
+          name: metadata.name.replace(/^generator-/, '').trim(),
+          official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
+          owner: {
+            name: (metadata.author && metadata.author.name) || '',
+            site: ownerWebsite
+          },
+          site: metadata.links.homepage || metadata.links.repository || '',
+          stars: github.starsCount || 0,
+          timeSince: moment(metadata.date).fromNow(),
+          updated: metadata.date
+        };
+
+        return formattedPkg;
+      });
     })
     .catch(err => {
-      log.warn(
-        'npmsInfo: Could not fetch info for %s package because %s',
-        pkg,
-        err
-      );
+      log.warn(`npmsInfo: Could not fetch info because ${err}`);
       return false;
     });
 }

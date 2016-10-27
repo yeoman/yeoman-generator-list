@@ -22,6 +22,8 @@ const List = require('./src');
   // Be able to run this again
   let runTimeout = () => setTimeout(update, updateInterval * 1000);
 
+  List.log.info(`----\nDate: ${new Date()}\n----`);
+
   List.update(npmListKeyword)
   .then(response => {
     bucket.file('cache.json').createWriteStream({
