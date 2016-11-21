@@ -1,3 +1,17 @@
 language: node_js
 node_js:
   - '6'
+
+cache:
+  directories:
+  - node_modules
+
+env:
+  global:
+    - secure: SdJCUTBQHUOClOIRGj79/uJyQ61NIliXSpp0NzW3NP+hF+ydqA55r1pPYIzh7RRyjmxPONo1Tu+qr4KrxYxq1Vj6CMU6KEmItCnytUQJDlcyRsMskf4bJXjLu8B8OlFU0N1p+0iNt32mpMJ2jix4NDBJwgjhYEJ1BSZgQMtjEls=
+    - GIT_EMAIL: travis@yeoman.io
+    - GIT_SOURCE: dist
+    - GITHUB_REPO: yeoman/yeoman-generator-list
+
+after_success:
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ] && [[ ${TRAVIS_JOB_NUMBER} == *".1" ]]; then npm install git-update-ghpages; ./node_modules/.bin/git-update-ghpages -e -b cache-generators-list; fi
