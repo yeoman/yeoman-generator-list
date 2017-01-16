@@ -26,6 +26,10 @@ module.exports = list => {
       log.info(`npmsInfo: Fetched info for ${formattedGroupsPkg.length} valid packages ${moment().from(currentDate)}`);
 
       return formattedGroupsPkg;
+    })
+    .catch(err => {
+      log.error(`npmsInfo: npms.io API error ${err}`);
+      throw new Error('npmsInfo: Stop process to prevent a empty list.');
     });
 };
 
@@ -67,10 +71,6 @@ function fetchInfos(groupPkg) {
 
         return formattedPkg;
       });
-    })
-    .catch(err => {
-      log.warn(`npmsInfo: Could not fetch info because ${err}`);
-      return false;
     });
 }
 
