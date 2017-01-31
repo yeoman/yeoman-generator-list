@@ -28,6 +28,6 @@ module.exports = keyword => {
     })
     .catch(err => {
       log.error('npmKeyword: Unable to search for keywords ', err);
-      return err;
+      throw new Error('npmKeyword: Stop process to prevent a empty list.');
     });
 };
