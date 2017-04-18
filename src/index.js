@@ -26,7 +26,7 @@ module.exports = {
     })
     .catch(err => {
       log.error('Index: Failed to save to cache', err);
-      process.exit(1);
+      process.exit(1); // eslint-disable-line unicorn/no-process-exit
     });
   }
 };
