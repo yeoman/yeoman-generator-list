@@ -26,7 +26,7 @@ module.exports = {
     })
     .catch(err => {
       log.error('Index: Failed to save to cache', err);
-      return err;
+      process.exit(1);
     });
   }
 };

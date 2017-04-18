@@ -56,7 +56,6 @@ function fetchInfos(groupPkg) {
 
         const formattedPkg = {
           description: cleanupDescription(metadata.description || ''),
-          downloads: npm.downloads[2].count,
           name: metadata.name.replace(/^generator-/, '').trim(),
           official: (metadata.links.repository && metadata.links.repository.includes('https://github.com/yeoman/')) || false,
           owner: {
@@ -68,6 +67,10 @@ function fetchInfos(groupPkg) {
           timeSince: moment(metadata.date).fromNow(),
           updated: metadata.date
         };
+
+        if (npm) {
+          formattedPkg.downloads = npm.downloads[2].count || 0;
+        }
 
         return formattedPkg;
       });
