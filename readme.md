@@ -1,5 +1,7 @@
 # yeoman-generator-list
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/yeoman/yeoman-generator-list.svg)](https://greenkeeper.io/)
+
 > Creates a list of all Yeoman generators as JSON.
 
 ## Configuring the Environment
