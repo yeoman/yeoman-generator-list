@@ -14,6 +14,9 @@ module.exports = {
 
     return update(keyword)
     .then(data => {
+      if (data.length === 0) {
+        throw new Error('Index: date length = 0');
+      }
       log.info('Index: updated %s generators', data.length);
       data = JSON.stringify(data);
       let shasum = crypto.createHash('sha1');
